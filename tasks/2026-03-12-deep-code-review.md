@@ -13,7 +13,7 @@
 
 1. Configuration audit false positives:
    - `tools.profile` was flagged even when explicit `tools.allow` or `tools.deny` controls existed.
-   - `plugins.allow` was treated as healthy even when it omitted `clawshield-local`.
+   - `plugins.allow` was treated as healthy even when it omitted `clawseatbelt`.
 2. Skill scanner robustness:
    - recursive scans could follow symlink loops
    - large directories such as `node_modules` were not excluded
@@ -29,7 +29,7 @@
 
 - Tightened `assessOpenClawConfiguration` to reduce false positives and catch omitted allowlist entries.
 - Hardened `scanSkillDirectory` against symlinks, oversized files, and dependency-tree noise.
-- Made `clawshield-scan` fail cleanly with an operator-readable error.
+- Made `clawseatbelt-scan` fail cleanly with an operator-readable error.
 - Reworked recursive redaction to preserve sanitized clones across circular references.
 - Expanded `openclaw.plugin.json` to match the runtime config schema.
 - Switched the build clean step to a Node-based command for cross-platform behavior.

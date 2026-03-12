@@ -1,6 +1,6 @@
 # Plugin Adapter
 
-This component is the seam between ClawShield’s pure logic and OpenClaw’s live runtime. It uses the currently verified extension surface:
+This component is the seam between ClawSeatbelt’s pure logic and OpenClaw’s live runtime. It uses the currently verified extension surface:
 
 - `openclaw.extensions` in `package.json`
 - `api.on(...)`
@@ -25,8 +25,8 @@ stateDiagram-v2
 ```mermaid
 sequenceDiagram
   participant OpenClaw as OpenClaw Runtime
-  participant Plugin as ClawShield Adapter
-  participant Core as ClawShield Runtime
+  participant Plugin as ClawSeatbelt Adapter
+  participant Core as ClawSeatbelt Runtime
 
   OpenClaw->>Plugin: load extension
   Plugin->>Core: validate config
@@ -44,7 +44,7 @@ sequenceDiagram
 ```mermaid
 flowchart TD
   A[OpenClaw config] --> B[Config validation]
-  B --> C[ClawShield runtime]
+  B --> C[ClawSeatbelt runtime]
   D[Commands] --> C
   E[Hooks] --> C
   C --> F[Reply payloads]

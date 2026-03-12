@@ -2,7 +2,7 @@ import type { OpenClawPluginConfigSchema } from "../types/openclaw.js";
 
 export type RuntimeMode = "observe" | "enforce" | "quiet";
 
-export interface ClawShieldConfig {
+export interface ClawSeatbeltConfig {
   mode: RuntimeMode;
   warnThreshold: number;
   holdThreshold: number;
@@ -13,7 +13,7 @@ export interface ClawShieldConfig {
   dangerousToolPatterns: string[];
 }
 
-export const defaultClawShieldConfig: ClawShieldConfig = {
+export const defaultClawSeatbeltConfig: ClawSeatbeltConfig = {
   mode: "observe",
   warnThreshold: 30,
   holdThreshold: 60,
@@ -30,7 +30,7 @@ function isObject(value: unknown): value is Record<string, unknown> {
 
 function readNumber(
   source: Record<string, unknown>,
-  key: keyof ClawShieldConfig,
+  key: keyof ClawSeatbeltConfig,
   errors: string[]
 ): number | undefined {
   const value = source[key];
@@ -44,13 +44,13 @@ function readNumber(
   return value;
 }
 
-export function validateClawShieldConfig(value: unknown): { ok: true; value: ClawShieldConfig } | { ok: false; errors: string[] } {
+export function validateClawSeatbeltConfig(value: unknown): { ok: true; value: ClawSeatbeltConfig } | { ok: false; errors: string[] } {
   if (value === undefined) {
     return {
       ok: true,
       value: {
-        ...defaultClawShieldConfig,
-        dangerousToolPatterns: [...defaultClawShieldConfig.dangerousToolPatterns]
+        ...defaultClawSeatbeltConfig,
+        dangerousToolPatterns: [...defaultClawSeatbeltConfig.dangerousToolPatterns]
       }
     };
   }
@@ -60,9 +60,9 @@ export function validateClawShieldConfig(value: unknown): { ok: true; value: Cla
   }
 
   const errors: string[] = [];
-  const next: ClawShieldConfig = {
-    ...defaultClawShieldConfig,
-    dangerousToolPatterns: [...defaultClawShieldConfig.dangerousToolPatterns]
+  const next: ClawSeatbeltConfig = {
+    ...defaultClawSeatbeltConfig,
+    dangerousToolPatterns: [...defaultClawSeatbeltConfig.dangerousToolPatterns]
   };
 
   if (value.mode !== undefined) {
@@ -135,9 +135,9 @@ export function validateClawShieldConfig(value: unknown): { ok: true; value: Cla
   return errors.length > 0 ? { ok: false, errors } : { ok: true, value: next };
 }
 
-export const clawShieldConfigSchema: OpenClawPluginConfigSchema = {
+export const clawSeatbeltConfigSchema: OpenClawPluginConfigSchema = {
   validate(value) {
-    const parsed = validateClawShieldConfig(value);
+    const parsed = validateClawSeatbeltConfig(value);
     return parsed.ok ? { ok: true, value: parsed.value } : { ok: false, errors: parsed.errors };
   },
   uiHints: {
@@ -162,7 +162,7 @@ export const clawShieldConfigSchema: OpenClawPluginConfigSchema = {
     },
     dangerousToolPatterns: {
       label: "Dangerous Tools",
-      help: "Tool names that ClawShield treats as high-impact when a session is risky",
+      help: "Tool names that ClawSeatbelt treats as high-impact when a session is risky",
       advanced: true
     }
   },
@@ -180,7 +180,7 @@ export const clawShieldConfigSchema: OpenClawPluginConfigSchema = {
       dangerousToolPatterns: {
         type: "array",
         items: { type: "string" },
-        default: defaultClawShieldConfig.dangerousToolPatterns
+        default: defaultClawSeatbeltConfig.dangerousToolPatterns
       }
     }
   }

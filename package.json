@@ -1,7 +1,7 @@
 {
-  "name": "@clawshield/local",
+  "name": "clawseatbelt",
   "version": "0.1.0",
-  "description": "Local-first trust layer plugin for OpenClaw operators.",
+  "description": "OpenClaw security plugin for local-first prompt injection defense, skill scanning, transcript redaction, and posture reporting.",
   "homepage": "https://github.com/cschanhniem/clawshield#readme",
   "bugs": {
     "url": "https://github.com/cschanhniem/clawshield/issues"
@@ -45,16 +45,24 @@
   },
   "keywords": [
     "openclaw",
+    "openclaw-plugin",
+    "openclaw-security",
     "security",
     "plugin",
     "local-first",
-    "trust"
+    "trust",
+    "prompt-injection",
+    "tool-guardrails",
+    "skill-scanner",
+    "transcript-redaction",
+    "pii-redaction",
+    "posture-report",
+    "supply-chain-security",
+    "agent-security",
+    "tool-policy"
   ],
-  "author": "ClawShield",
+  "author": "ClawSeatbelt",
   "license": "MIT",
-  "publishConfig": {
-    "access": "public"
-  },
   "peerDependencies": {
     "openclaw": "^2026.3.11"
   },

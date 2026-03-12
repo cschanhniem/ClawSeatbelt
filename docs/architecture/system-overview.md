@@ -1,6 +1,6 @@
 # System Overview
 
-ClawShield is split into a small, fast hot path and a slower analysis path. The hot path uses the current OpenClaw hook surface to score inbound prompts, redact outbound and persisted text, and block dangerous tool calls in enforce mode. The slower path scans skill bundles and assembles posture reports.
+ClawSeatbelt is split into a small, fast hot path and a slower analysis path. The hot path uses the current OpenClaw hook surface to score inbound prompts, redact outbound and persisted text, and block dangerous tool calls in enforce mode. The slower path scans skill bundles, normalizes OpenClaw security audit JSON, and assembles posture reports.
 
 ## Components
 
@@ -8,7 +8,8 @@ ClawShield is split into a small, fast hot path and a slower analysis path. The 
 - `Runtime State`: memoization, throttling, recent incidents, and mode overrides.
 - `Redaction Engine`: transcript hygiene for persisted tool output.
 - `Skill Scanner`: local bundle inspection.
-- `Posture Reporter`: unified findings and remediation summary.
+- `OpenClaw Audit Ingestor`: normalizes first-party audit JSON into ClawSeatbelt findings.
+- `Posture Reporter`: unified findings, posture facets, snapshots, and remediation summary.
 - `Plugin Adapter`: OpenClaw-facing hooks and commands via `api.on(...)`, `registerCommand(...)`, and `registerService(...)`.
 
 ## System State Machine
@@ -23,6 +24,8 @@ stateDiagram-v2
   RedactingOutbound --> RedactingToolResult: tool_result_persist
   Idle --> ScanningSkills: scan requested
   Idle --> BuildingPosture: status or audit requested
+  BuildingPosture --> LoadingAudit: audit file supplied
+  LoadingAudit --> BuildingPosture: audit normalized
   ReceivingMessage --> Idle: cached risk snapshot
   RedactingOutbound --> Idle: sanitized outbound text
   RedactingToolResult --> Idle: sanitized output returned
@@ -38,6 +41,7 @@ sequenceDiagram
   participant Adapter as Plugin Adapter
   participant Risk as Risk Engine
   participant State as Runtime State
+  participant Audit as Audit Ingestor
   participant Report as Posture Reporter
 
   Channel->>Adapter: message_received
@@ -50,10 +54,12 @@ sequenceDiagram
   Channel->>Adapter: before_tool_call
   Adapter->>State: resolve session risk
   Adapter-->>Channel: allow or block dangerous tools
-  Channel->>Adapter: /clawshield-status
-  Adapter->>Report: buildPosture(inputs)
-  Report-->>Adapter: posture summary
-  Adapter-->>Channel: shareable status message
+  Channel->>Adapter: /clawseatbelt-status --audit-file --diff-file
+  Adapter->>Audit: normalize audit json (optional)
+  Audit-->>Adapter: audit findings
+  Adapter->>Report: build posture snapshot + diff
+  Report-->>Adapter: posture card, snapshot, diff
+  Adapter-->>Channel: shareable status message or json export
 ```
 
 ## Data Flow
@@ -69,11 +75,15 @@ flowchart LR
   G --> E
   I[Skill bundle] --> J[Skill Scanner]
   J --> E
+  L[OpenClaw audit JSON] --> M[Audit Ingestor]
+  M --> E
+  N[Previous snapshot] --> E
   E --> K[Operator-facing summary]
 ```
 
 ## Trust Boundaries
 
 - Untrusted: inbound messages, remote links, imported skill bundles, tool outputs.
+- Untrusted until parsed: imported audit JSON and prior posture snapshots.
 - Trusted with care: local config, local rule packs, plugin code.
 - Optional and off-path: future threat-intel feeds or third-party policy providers.

@@ -1,25 +1,25 @@
-import { clawShieldConfigSchema, validateClawShieldConfig } from "./core/config.js";
-import { ClawShieldRuntime } from "./core/clawShieldRuntime.js";
+import { clawSeatbeltConfigSchema, validateClawSeatbeltConfig } from "./core/config.js";
+import { ClawSeatbeltRuntime } from "./core/clawSeatbeltRuntime.js";
 import type { OpenClawPluginApiLike, OpenClawPluginDefinitionLike } from "./types/openclaw.js";
 
-export const clawShieldPluginDefinition: OpenClawPluginDefinitionLike = {
-  id: "clawshield-local",
-  name: "ClawShield Local",
+export const clawSeatbeltPluginDefinition: OpenClawPluginDefinitionLike = {
+  id: "clawseatbelt",
+  name: "ClawSeatbelt",
   description:
     "Local-first trust layer for OpenClaw with inbound risk scoring, transcript hygiene, and skill inspection.",
   version: "0.1.0",
-  configSchema: clawShieldConfigSchema,
+  configSchema: clawSeatbeltConfigSchema,
   register(api: OpenClawPluginApiLike): void {
-    const parsed = validateClawShieldConfig(api.pluginConfig);
+    const parsed = validateClawSeatbeltConfig(api.pluginConfig);
     if (!parsed.ok) {
-      throw new Error(`Invalid ClawShield config: ${parsed.errors.join("; ")}`);
+      throw new Error(`Invalid ClawSeatbelt config: ${parsed.errors.join("; ")}`);
     }
 
-    const runtime = new ClawShieldRuntime(api, parsed.value);
+    const runtime = new ClawSeatbeltRuntime(api, parsed.value);
     runtime.register();
   }
 };
 
-export default function registerClawShield(api: OpenClawPluginApiLike): void {
-  void clawShieldPluginDefinition.register(api);
+export default function registerClawSeatbelt(api: OpenClawPluginApiLike): void {
+  void clawSeatbeltPluginDefinition.register(api);
 }

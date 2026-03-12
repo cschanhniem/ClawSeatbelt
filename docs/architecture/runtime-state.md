@@ -1,6 +1,6 @@
 # Runtime State
 
-The runtime state is intentionally simple. It exists to keep the hot path fast and to prevent ClawShield from nagging operators every time the same risky prompt reappears.
+The runtime state is intentionally simple. It exists to keep the hot path fast and to prevent ClawSeatbelt from nagging operators every time the same risky prompt reappears.
 
 ## State Machine
 

@@ -2,7 +2,7 @@
 
 ## Mission
 
-Build ClawShield into the local-first trust layer that serious OpenClaw operators install before they add anything else. The product should feel like seatbelts: quiet, decisive, intelligible, and hard to outgrow.
+Build ClawSeatbelt into the local-first trust layer that serious OpenClaw operators install before they add anything else. The product should feel like seatbelts: quiet, decisive, intelligible, and hard to outgrow.
 
 This repository exists to produce three things in lockstep:
 
@@ -59,7 +59,7 @@ Start here, in order:
 
 ## Product North Star
 
-ClawShield wins if a cautious OpenClaw operator can install it in minutes and immediately gain:
+ClawSeatbelt wins if a cautious OpenClaw operator can install it in minutes and immediately gain:
 
 - a shareable posture report
 - message risk scoring before the agent sees risky content
@@ -76,5 +76,8 @@ Differentiate on:
 - strong operator UX
 - skill supply-chain inspection
 - unified posture reporting that composes with OpenClaw security audit, pairing, exec approvals, and tool policy
+- benchmark proof before marketing claims
+- packaging and provenance that make the trust story visible
+- optional interop with heavier policy systems without pulling them into the baseline
 
-Do not drift into a vague “AI firewall.” Stay specific, composable, and useful.
+Win the choice architecture, not raw feature count. Do not drift into a vague "AI firewall." Stay specific, composable, and useful.

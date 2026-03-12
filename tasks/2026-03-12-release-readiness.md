@@ -27,7 +27,7 @@ The plugin was technically ready, but the publication path still had avoidable f
 
 ## Next Moves
 
-1. Confirm npm scope ownership for `@clawshield`.
+1. Confirm ownership or availability of the final npm package name.
 2. Push the release commit to GitHub.
 3. Add `NPM_TOKEN` in repository secrets.
 4. Publish manually once, or push tag `v0.1.0` to use the workflow.

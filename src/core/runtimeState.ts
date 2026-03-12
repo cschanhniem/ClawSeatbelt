@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import type { ClawShieldConfig, RuntimeMode } from "./config.js";
+import type { ClawSeatbeltConfig, RuntimeMode } from "./config.js";
 import type { Finding, RiskEvaluation } from "../types/domain.js";
 
 export interface SessionRiskSnapshot {
@@ -17,14 +17,14 @@ export interface IncidentRecord {
   findingIds: string[];
 }
 
-export class ClawShieldRuntimeState {
+export class ClawSeatbeltRuntimeState {
   private readonly evaluationCache = new Map<string, RiskEvaluation>();
   private readonly sessionRisk = new Map<string, SessionRiskSnapshot>();
   private readonly notificationGate = new Map<string, { fingerprint: string; lastEmittedAt: number; suppressedCount: number }>();
   private readonly incidents: IncidentRecord[] = [];
   private modeOverride: RuntimeMode | undefined;
 
-  constructor(private readonly config: ClawShieldConfig) {}
+  constructor(private readonly config: ClawSeatbeltConfig) {}
 
   fingerprint(input: string): string {
     return createHash("sha1").update(input).digest("hex").slice(0, 12);

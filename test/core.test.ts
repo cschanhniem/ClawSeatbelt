@@ -6,7 +6,11 @@ import { tmpdir } from "node:os";
 import {
   assessOpenClawConfiguration,
   buildPostureSummary,
+  buildPostureSnapshot,
+  diffPostureSnapshots,
   evaluateInboundMessage,
+  normalizeOpenClawAuditReport,
+  parsePostureSnapshot,
   redactUnknownValue,
   redactToolResult,
   scanSkillDirectory
@@ -30,7 +34,7 @@ test("redactToolResult removes secret-like values", () => {
 });
 
 test("scanSkillDirectory scores risky bundle patterns", () => {
-  const root = mkdtempSync(join(tmpdir(), "clawshield-skill-"));
+  const root = mkdtempSync(join(tmpdir(), "clawseatbelt-skill-"));
   mkdirSync(join(root, "sample"));
   writeFileSync(
     join(root, "sample", "SKILL.md"),
@@ -45,7 +49,7 @@ test("scanSkillDirectory scores risky bundle patterns", () => {
 });
 
 test("scanSkillDirectory ignores symlink loops", () => {
-  const root = mkdtempSync(join(tmpdir(), "clawshield-loop-"));
+  const root = mkdtempSync(join(tmpdir(), "clawseatbelt-loop-"));
   mkdirSync(join(root, "sample"));
   writeFileSync(join(root, "sample", "SKILL.md"), "safe content");
   symlinkSync(root, join(root, "sample", "loop"));
@@ -62,6 +66,7 @@ test("buildPostureSummary produces shareable operator text", () => {
 
   assert.match(summary.shareMessage, /Score/);
   assert.ok(summary.remediationSteps.length > 0);
+  assert.match(summary.card, /ClawSeatbelt mode/);
 });
 
 test("redactUnknownValue handles circular objects without crashing", () => {
@@ -81,9 +86,76 @@ test("redactUnknownValue handles circular objects without crashing", () => {
 
 test("assessOpenClawConfiguration respects explicit tool allowlists", () => {
   const findings = assessOpenClawConfiguration({
-    plugins: { allow: ["clawshield-local"] },
+    plugins: { allow: ["clawseatbelt"] },
     tools: { allow: ["exec"] }
   });
 
   assert.ok(!findings.some((finding) => finding.id === "cfg-tools-profile"));
+});
+
+test("assessOpenClawConfiguration flags open ingress with insecure dm scope", () => {
+  const findings = assessOpenClawConfiguration({
+    plugins: { allow: ["clawseatbelt"] },
+    channels: {
+      telegram: {
+        dmPolicy: "open",
+        allowFrom: ["*"]
+      }
+    },
+    session: {
+      dmScope: "main"
+    }
+  });
+
+  assert.ok(findings.some((finding) => finding.id === "cfg-pairing-dm-open"));
+  assert.ok(findings.some((finding) => finding.id === "cfg-session-dm-scope"));
+});
+
+test("normalizeOpenClawAuditReport converts failing checks into findings", () => {
+  const audit = normalizeOpenClawAuditReport({
+    generatedAt: "2026-03-12T12:00:00.000Z",
+    findings: [
+      {
+        id: "audit.exec.full",
+        title: "exec.security is full",
+        severity: "high",
+        status: "failed",
+        remediation: {
+          summary: "Tighten exec security."
+        }
+      },
+      {
+        id: "audit.ok",
+        title: "healthy",
+        status: "passed"
+      }
+    ]
+  });
+
+  assert.equal(audit.findings.length, 1);
+  assert.equal(audit.findings[0]?.source, "openclaw-security-audit");
+  assert.equal(audit.metadata.findingCount, 1);
+});
+
+test("posture snapshots can be diffed and parsed from json", () => {
+  const previous = buildPostureSnapshot({
+    configurationFindings: assessOpenClawConfiguration({
+      plugins: { allow: ["clawseatbelt"] },
+      exec: { security: "full" }
+    }),
+    generatedAt: "2026-03-12T10:00:00.000Z"
+  });
+  const current = buildPostureSnapshot({
+    configurationFindings: assessOpenClawConfiguration({
+      plugins: { allow: ["clawseatbelt"] }
+    }),
+    generatedAt: "2026-03-12T11:00:00.000Z"
+  });
+
+  const diff = diffPostureSnapshots(previous, current);
+  const parsed = parsePostureSnapshot(JSON.parse(JSON.stringify(current)));
+
+  assert.ok(diff.scoreDelta < 0);
+  assert.ok(diff.resolvedFindingIds.includes("cfg-exec-full"));
+  assert.equal(parsed.headline, current.headline);
 });

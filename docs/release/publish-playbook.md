@@ -2,7 +2,7 @@
 
 ## Before You Publish
 
-1. Make sure you own the npm scope for `@clawshield`.
+1. Confirm `clawseatbelt` is still unpublished or owned by you on npm.
 2. Configure npm authentication locally or set `NPM_TOKEN` in GitHub Actions secrets.
 3. Confirm the version in `package.json`, `openclaw.plugin.json`, and `CHANGELOG.md` all agree.
 4. Confirm the package still targets the current OpenClaw release line.
@@ -13,20 +13,20 @@
 npm install
 npm test
 npm pack --json --pack-destination .tmp/pack
-npm publish --access public
+npm publish
 ```
 
 ## Recommended Post-Publish Checks
 
 ```bash
-npm view @clawshield/local version
-npm view @clawshield/local dist-tags --json
+npm view clawseatbelt version
+npm view clawseatbelt dist-tags --json
 ```
 
 Then verify install in a disposable OpenClaw instance:
 
 ```bash
-openclaw plugins install @clawshield/local@0.1.0
+openclaw plugins install clawseatbelt@0.1.0
 ```
 
 ## Automated Publish
@@ -44,10 +44,6 @@ Recommended flow:
 3. Let GitHub Actions run CI, then publish to npm.
 
 ## If The Publish Fails
-
-### Scope is not owned
-
-Change the package name to a scope you control, then repeat the release check.
 
 ### Package name already exists
 

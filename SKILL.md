@@ -1,12 +1,12 @@
-# ClawShield Builder Skill
+# ClawSeatbelt Builder Skill
 
 ## Purpose
 
-Use this skill when working inside the ClawShield repository. It defines the standard of thinking, the repo workflow, and the product constraints that keep the project coherent.
+Use this skill when working inside the ClawSeatbelt repository. It defines the standard of thinking, the repo workflow, and the product constraints that keep the project coherent.
 
 ## What You Are Building
 
-ClawShield is a local-first trust layer for OpenClaw. The core shape is:
+ClawSeatbelt is a local-first trust layer for OpenClaw. The core shape is:
 
 - inbound message risk scoring
 - prompt-time guard context via `before_prompt_build`
@@ -21,9 +21,10 @@ ClawShield is a local-first trust layer for OpenClaw. The core shape is:
 
 1. Read [plan.md](plan.md) and the latest file in [tasks](tasks).
 2. Read the architecture doc that touches the subsystem you will edit.
-3. Make the smallest coherent set of changes that improves the product materially.
-4. Update docs, diagrams, and task log in the same turn.
-5. Run verification for the surfaces you touched.
+3. Check which rubric in `plan.md` the work is meant to improve and which competitor it is meant to beat.
+4. Make the smallest coherent set of changes that improves the product materially.
+5. Update docs, diagrams, and task log in the same turn.
+6. Run verification for the surfaces you touched.
 
 ## Decision Filter
 
@@ -34,6 +35,7 @@ Choose the path that is:
 - explainable before clever
 - composable before sprawling
 - fast on the hot path
+- benchmarked before loudly claimed
 
 ## Required Deliverables For Substantial Changes
 
@@ -51,6 +53,7 @@ Choose the path that is:
 - Model findings as typed data, not freeform strings.
 - Every finding should carry severity, evidence, rationale, and remediation.
 - Operator-facing text must be concise and trustworthy.
+- When adding product surface, prefer the work that improves default-install trust, posture clarity, or skill supply-chain safety.
 
 ## Writing Standard
 

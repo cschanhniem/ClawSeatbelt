@@ -1,8 +1,9 @@
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { isAbsolute, resolve, sep } from "node:path";
-import { buildPostureSummary } from "../reporting/postureReport.js";
+import { normalizeOpenClawAuditReport } from "../reporting/openClawAudit.js";
+import { buildPostureSummary, parsePostureSnapshot } from "../reporting/postureReport.js";
 import { scanSkillDirectory } from "../scanner/skillScanner.js";
-import type { RiskEvaluation } from "../types/domain.js";
+import type { OpenClawAuditReport, PostureSnapshot, RiskEvaluation } from "../types/domain.js";
 import type {
   OpenClawPluginApiLike,
   PluginCommandContext,
@@ -13,10 +14,10 @@ import type {
   ReplyPayload
 } from "../types/openclaw.js";
 import { assessOpenClawConfiguration } from "./configurationAudit.js";
-import type { ClawShieldConfig, RuntimeMode } from "./config.js";
+import type { ClawSeatbeltConfig, RuntimeMode } from "./config.js";
 import { evaluateInboundMessage } from "./riskEngine.js";
 import { redactToolResult, redactUnknownValue } from "./redactionEngine.js";
-import { ClawShieldRuntimeState } from "./runtimeState.js";
+import { ClawSeatbeltRuntimeState } from "./runtimeState.js";
 
 function resolveSessionKey(parts: Array<string | undefined>): string | undefined {
   const filtered = parts.filter((part): part is string => Boolean(part));
@@ -33,7 +34,7 @@ function buildGuardrailContext(
   suppressedCount: number
 ): string {
   const base =
-    `ClawShield scored this request ${evaluation.score}/100 (${evaluation.severity}). ` +
+    `ClawSeatbelt scored this request ${evaluation.score}/100 (${evaluation.severity}). ` +
     `Primary findings: ${formatFindingsInline(evaluation)}.`;
 
   if (mode === "quiet") {
@@ -55,44 +56,110 @@ function buildReply(text: string, isError = false): ReplyPayload {
   return { text, isError };
 }
 
-export class ClawShieldRuntime {
-  readonly state: ClawShieldRuntimeState;
+interface StatusCommandOptions {
+  json: boolean;
+  auditFile?: string;
+  diffFile?: string;
+  writeSnapshot?: string;
+}
+
+function tokenizeArgs(raw: string | undefined): string[] {
+  if (!raw) {
+    return [];
+  }
+
+  const tokens: string[] = [];
+  const pattern = /"([^"]*)"|'([^']*)'|(\S+)/g;
+
+  for (const match of raw.matchAll(pattern)) {
+    const token = match[1] ?? match[2] ?? match[3];
+    if (token) {
+      tokens.push(token);
+    }
+  }
+
+  return tokens;
+}
+
+function parseStatusArgs(raw: string | undefined): { options?: StatusCommandOptions; error?: string } {
+  const tokens = tokenizeArgs(raw);
+  const options: StatusCommandOptions = {
+    json: false
+  };
+
+  for (let index = 0; index < tokens.length; index += 1) {
+    const token = tokens[index];
+
+    if (token === "--json") {
+      options.json = true;
+      continue;
+    }
+
+    if (token === "--audit-file" || token === "--diff-file" || token === "--write-snapshot") {
+      const value = tokens[index + 1];
+      if (!value) {
+        return { error: `${token} requires a path.` };
+      }
+
+      if (token === "--audit-file") {
+        options.auditFile = value;
+      } else if (token === "--diff-file") {
+        options.diffFile = value;
+      } else {
+        options.writeSnapshot = value;
+      }
+      index += 1;
+      continue;
+    }
+
+    return {
+      error:
+        `Unknown status option: ${token}. ` +
+        "Use --json, --audit-file <path>, --diff-file <path>, or --write-snapshot <path>."
+    };
+  }
+
+  return { options };
+}
+
+export class ClawSeatbeltRuntime {
+  readonly state: ClawSeatbeltRuntimeState;
 
   constructor(
     private readonly api: OpenClawPluginApiLike,
-    private readonly config: ClawShieldConfig
+    private readonly config: ClawSeatbeltConfig
   ) {
-    this.state = new ClawShieldRuntimeState(config);
+    this.state = new ClawSeatbeltRuntimeState(config);
   }
 
   register(): void {
     this.api.registerService({
-      id: "clawshield-maintenance",
+      id: "clawseatbelt-maintenance",
       start: ({ logger }) => {
-        logger.info("ClawShield maintenance service started");
+        logger.info("ClawSeatbelt maintenance service started");
       },
       stop: ({ logger }) => {
-        logger.info("ClawShield maintenance service stopped");
+        logger.info("ClawSeatbelt maintenance service stopped");
       }
     });
 
     this.api.registerCommand({
-      name: "clawshield-status",
-      description: "Show recent ClawShield posture and runtime mode",
+      name: "clawseatbelt-status",
+      description: "Show recent ClawSeatbelt posture and runtime mode",
       requireAuth: true,
       handler: (ctx) => this.handleStatus(ctx)
     });
 
     this.api.registerCommand({
-      name: "clawshield-mode",
-      description: "Temporarily set ClawShield runtime mode: observe, enforce, or quiet",
+      name: "clawseatbelt-mode",
+      description: "Temporarily set ClawSeatbelt runtime mode: observe, enforce, or quiet",
       requireAuth: true,
       acceptsArgs: true,
       handler: (ctx) => this.handleMode(ctx)
     });
 
     this.api.registerCommand({
-      name: "clawshield-scan",
+      name: "clawseatbelt-scan",
       description: "Scan a local skill directory for supply-chain risk",
       requireAuth: true,
       acceptsArgs: true,
@@ -100,7 +167,7 @@ export class ClawShieldRuntime {
     });
 
     this.api.registerCommand({
-      name: "clawshield-explain",
+      name: "clawseatbelt-explain",
       description: "Explain a recent finding ID and its operator impact",
       requireAuth: true,
       acceptsArgs: true,
@@ -121,22 +188,81 @@ export class ClawShieldRuntime {
     this.api.on("tool_result_persist", (event) => this.beforeToolPersist(event.message));
   }
 
-  private handleStatus(_ctx: PluginCommandContext): ReplyPayload {
+  private handleStatus(ctx: PluginCommandContext): ReplyPayload {
+    const parsed = parseStatusArgs(ctx.args);
+    if (parsed.error || !parsed.options) {
+      return buildReply(parsed.error ?? "Invalid status options.", true);
+    }
+
     const configurationFindings = assessOpenClawConfiguration(this.api.config);
     const recentIncidents = this.state.getRecentIncidents(this.config.maxDigestFindings);
-    const summary = buildPostureSummary({ configurationFindings });
     const mode = this.state.getEffectiveMode();
-    const incidentLine =
-      recentIncidents.length > 0
-        ? recentIncidents
-            .map((incident) => `${incident.title} [${incident.severity}]`)
-            .slice(0, this.config.maxDigestFindings)
-            .join("; ")
-        : "No recent high-signal incidents.";
+    const incidentLines = recentIncidents
+      .map((incident) => `${incident.title} [${incident.severity}]`)
+      .slice(0, this.config.maxDigestFindings);
 
-    return buildReply(
-      `ClawShield mode: ${mode}. ${summary.shareMessage} Recent: ${incidentLine}`
+    let openClawAudit: OpenClawAuditReport | undefined;
+    if (parsed.options.auditFile) {
+      try {
+        openClawAudit = this.loadAuditReport(parsed.options.auditFile);
+      } catch (error) {
+        const message = error instanceof Error ? error.message : "unknown audit parse failure";
+        return buildReply(`Failed to load OpenClaw audit file: ${message}`, true);
+      }
+    }
+
+    let previousSnapshot: PostureSnapshot | undefined;
+    if (parsed.options.diffFile) {
+      try {
+        previousSnapshot = this.loadPostureSnapshot(parsed.options.diffFile);
+      } catch (error) {
+        const message = error instanceof Error ? error.message : "unknown diff parse failure";
+        return buildReply(`Failed to load posture snapshot: ${message}`, true);
+      }
+    }
+
+    const summary = buildPostureSummary(
+      {
+        configurationFindings,
+        openClawAudit
+      },
+      {
+        previousSnapshot,
+        mode,
+        recentIncidents: incidentLines
+      }
     );
+
+    const { card, diff, ...snapshot } = summary;
+
+    let snapshotPath: string | undefined;
+    if (parsed.options.writeSnapshot) {
+      try {
+        snapshotPath = this.safeResolvePath(parsed.options.writeSnapshot);
+        writeFileSync(snapshotPath, `${JSON.stringify(snapshot, null, 2)}\n`, "utf8");
+      } catch (error) {
+        const message = error instanceof Error ? error.message : "unknown snapshot write failure";
+        return buildReply(`Failed to write posture snapshot: ${message}`, true);
+      }
+    }
+
+    if (parsed.options.json) {
+      return buildReply(
+        JSON.stringify(
+          {
+            mode,
+            posture: snapshot,
+            diff,
+            recentIncidents
+          },
+          null,
+          2
+        )
+      );
+    }
+
+    const suffix = snapshotPath ? ` Snapshot written to ${snapshotPath}.` : "";
+    return buildReply(`${card}${suffix}`);
   }
 
   private handleMode(ctx: PluginCommandContext): ReplyPayload {
@@ -148,7 +274,7 @@ export class ClawShieldRuntime {
       return buildReply("Invalid mode. Use observe, enforce, or quiet.", true);
     }
     this.state.setModeOverride(requested);
-    return buildReply(`ClawShield mode set to ${requested} for this runtime.`);
+    return buildReply(`ClawSeatbelt mode set to ${requested} for this runtime.`);
   }
 
   private handleScan(ctx: PluginCommandContext): ReplyPayload {
@@ -168,7 +294,7 @@ export class ClawShieldRuntime {
       return buildReply(`Scanned ${target}. ${headline}`);
     } catch (error) {
       const message = error instanceof Error ? error.message : "unknown scan failure";
-      this.api.logger.warn(`clawshield-scan failed: ${message}`);
+      this.api.logger.warn(`clawseatbelt-scan failed: ${message}`);
       return buildReply(`Scan failed: ${message}`, true);
     }
   }
@@ -176,7 +302,7 @@ export class ClawShieldRuntime {
   private handleExplain(ctx: PluginCommandContext): ReplyPayload {
     const findingId = ctx.args?.trim();
     if (!findingId) {
-      return buildReply("Provide a finding ID, for example clawshield-explain cfg-exec-full.", true);
+      return buildReply("Provide a finding ID, for example clawseatbelt-explain cfg-exec-full.", true);
     }
 
     const configFinding = assessOpenClawConfiguration(this.api.config).find((finding) => finding.id === findingId);
@@ -239,24 +365,24 @@ export class ClawShieldRuntime {
 
     if (mode === "enforce" && snapshot.evaluation.score >= this.config.holdThreshold) {
       this.api.logger.warn(
-        `ClawShield blocked ${toolName} for risky session ${sessionKey ?? "unknown"} at ${snapshot.evaluation.score}/100`
+        `ClawSeatbelt blocked ${toolName} for risky session ${sessionKey ?? "unknown"} at ${snapshot.evaluation.score}/100`
       );
       return {
         block: true,
         blockReason:
-          `ClawShield blocked ${toolName} because the active session is high risk ` +
+          `ClawSeatbelt blocked ${toolName} because the active session is high risk ` +
           `(${snapshot.evaluation.score}/100, ${snapshot.evaluation.severity}).`
       };
     }
 
     if (mode !== "quiet" && snapshot.evaluation.score >= this.config.warnThreshold) {
       this.api.logger.warn(
-        `ClawShield warning for ${toolName} in session ${sessionKey ?? "unknown"} at ${snapshot.evaluation.score}/100`
+        `ClawSeatbelt warning for ${toolName} in session ${sessionKey ?? "unknown"} at ${snapshot.evaluation.score}/100`
       );
       return {
         block: false,
         blockReason:
-          `ClawShield warning: ${toolName} is being called from a risky session ` +
+          `ClawSeatbelt warning: ${toolName} is being called from a risky session ` +
           `(${snapshot.evaluation.score}/100).`
       };
     }
@@ -291,5 +417,17 @@ export class ClawShieldRuntime {
       this.api.logger.warn(`scan target resolved outside workspace: ${resolved}`);
     }
     return resolved;
+  }
+
+  private loadAuditReport(input: string): OpenClawAuditReport {
+    const target = this.safeResolvePath(input);
+    const parsed = JSON.parse(readFileSync(target, "utf8")) as unknown;
+    return normalizeOpenClawAuditReport(parsed, { sourcePath: target });
+  }
+
+  private loadPostureSnapshot(input: string): PostureSnapshot {
+    const target = this.safeResolvePath(input);
+    const parsed = JSON.parse(readFileSync(target, "utf8")) as unknown;
+    return parsePostureSnapshot(parsed);
   }
 }

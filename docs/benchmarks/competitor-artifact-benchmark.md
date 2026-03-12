@@ -7,7 +7,7 @@ This benchmark was run locally on 2026-03-12 using live npm artifacts:
 - `npm pack @openguardrails/moltguard`
 - `npm pack @adversa/secureclaw`
 - `npm pack @policyshield/openclaw-plugin`
-- `npm pack --pack-destination .tmp/pack` for ClawShield
+- `npm pack --pack-destination .tmp/pack` for ClawSeatbelt
 
 Each package was unpacked and inspected for:
 
@@ -23,16 +23,16 @@ This is an artifact and integration benchmark, not a runtime efficacy shootout. 
 
 | Package | Version | Package Footprint | Package Surface | External Requirement | Verified Notes |
 |---|---:|---:|---|---|---|
-| ClawShield Local | 0.1.0 | ~2.1 KB tarball, ~148 KB built `dist/` | local plugin core | none | `openclaw.extensions` points to `dist/openclaw.js`; no runtime deps |
+| ClawSeatbelt | 0.1.0 | ~23.8 KB tarball, ~180 KB built `dist/` | local plugin core | none | `openclaw.extensions` points to `dist/openclaw.js`; no runtime deps |
 | MoltGuard | 6.8.21 | 7.1 MB | plugin + gateway + dashboard + scripts | OpenGuardrails Core account/quota | README states auto-registration with Core and 500 free checks/day |
 | SecureClaw | 2.2.0 | 472 KB | plugin + skill + shell scripts + IOC/templates | none for baseline | README advertises audits, hardening, background monitors, and script-heavy skill deployment |
 | PolicyShield | 0.14.0 | 24 KB | thin plugin client | PolicyShield server | README defaults to `http://localhost:8100`, YAML rules, fail-open option |
 
 ## What The Artifact Review Tells Us
 
-### ClawShield’s Advantage
+### ClawSeatbelt’s Advantage
 
-ClawShield can credibly own the smallest trustworthy baseline:
+ClawSeatbelt can credibly own the smallest trustworthy baseline:
 
 - tiny package
 - no server dependency
@@ -64,7 +64,7 @@ Verified from bundled artifact and README:
 
 Positioning implication:
 
-SecureClaw is broad and operationally ambitious. ClawShield should stay narrower and cleaner: default trust posture, not a sprawling incident-response suite.
+SecureClaw is broad and operationally ambitious. ClawSeatbelt should stay narrower and cleaner: default trust posture, not a sprawling incident-response suite.
 
 ### PolicyShield
 
@@ -76,7 +76,7 @@ Verified from bundled artifact and README:
 
 Positioning implication:
 
-ClawShield should remain a strong local default and later export policies or findings into server-backed systems when teams need them.
+ClawSeatbelt should remain a strong local default and later export policies or findings into server-backed systems when teams need them.
 
 ## Strategic Conclusion
 

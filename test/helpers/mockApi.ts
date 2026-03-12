@@ -24,8 +24,8 @@ export function createMockApi(options?: {
   const hooks: MockApi["hooks"] = {};
 
   return {
-    id: "clawshield-local",
-    name: "ClawShield Local",
+    id: "clawseatbelt",
+    name: "ClawSeatbelt",
     source: "test",
     config: options?.config ?? {},
     pluginConfig: options?.pluginConfig,

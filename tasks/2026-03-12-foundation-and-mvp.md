@@ -8,7 +8,7 @@
 
 - Read and distill the research corpus.
 - Establish the repo operating system.
-- Build the first local-first ClawShield engine slice.
+- Build the first local-first ClawSeatbelt engine slice.
 
 ## What Changed
 
