@@ -1,52 +1,25 @@
 # ClawSeatbelt
 
-ClawSeatbelt is a local-first OpenClaw security plugin for operators who want safer daily use without handing trust to a cloud control plane. It scores risky inbound content, guards dangerous tool use, scans skills before trust expands, redacts sensitive transcript material, and turns OpenClaw security settings into one posture report a human can actually act on.
+ClawSeatbelt is the local-first trust plugin for OpenClaw. It gives operators posture, skill inspection, transcript hygiene, and risky-session guardrails in minutes, without asking them to stand up a hosted control plane.
 
 ClawSeatbelt is the new product name for the work that started under the ClawShield label. The repository path still uses `clawshield` for continuity, but the package, plugin ID, and public install surface now use `clawseatbelt`.
 
-If you are searching for an OpenClaw security plugin, OpenClaw prompt injection guard, OpenClaw skill scanner, or OpenClaw transcript redaction plugin, this is the product surface ClawSeatbelt is built to own.
+If you only install one OpenClaw trust plugin first, start here.
 
-## Why OpenClaw Users Choose ClawSeatbelt
+ClawSeatbelt is built for the exact high-intent searches OpenClaw users already make: OpenClaw security plugin, OpenClaw trust plugin, OpenClaw prompt injection protection, OpenClaw skill scanner, OpenClaw transcript redaction, and OpenClaw posture report.
 
-- Local-first by default. No account, no quota, no server, no cloud service in the hot path.
-- Useful on day one. Install the plugin, allow it explicitly, and get a readable posture report within minutes.
-- Built for the real OpenClaw threat model. It covers inbound message risk, dangerous tool calls, skill supply chain risk, transcript hygiene, and operator configuration gaps.
-- Composes with OpenClaw instead of pretending first-party controls do not exist. ClawSeatbelt works with `openclaw security audit`, tool policy, exec approvals, pairing, and plugin allowlists.
-- Small enough to inspect. The package is intentionally lean because trust starts with what users can verify.
-
-## What ClawSeatbelt Covers
-
-- OpenClaw prompt injection risk scoring before the model sees risky content
-- prompt-time guard context for safer agent behavior
-- dangerous tool-call blocking in `enforce` mode
-- transcript redaction for persisted tool results
-- outbound secret scrubbing
-- OpenClaw skill scanning for suspicious install and execution patterns
-- Detection of unpinned installs, moving refs, install hooks, remote fetches, and permission-widening setup steps inside skill bundles
-- unified posture reporting with remediation guidance
-- OpenClaw security audit JSON ingestion, snapshot export, and posture diffing
-
-## Install ClawSeatbelt For OpenClaw
-
-After publication:
+## Install In Two Minutes
 
 ```bash
 openclaw plugins install clawseatbelt@0.1.2
 openclaw config set --strict-json plugins.allow '["clawseatbelt"]'
 openclaw config set --strict-json plugins.entries.clawseatbelt.enabled true
+openclaw gateway restart
 ```
 
-Pin trust explicitly in your OpenClaw config:
+The plugin loads after the gateway restart. On a fresh OpenClaw home, the install step may briefly warn that `plugins.allow` is empty before the allowlist command runs. That is expected on first install. If OpenClaw also prints unrelated doctor warnings, such as Telegram policy warnings, those come from the existing OpenClaw config rather than ClawSeatbelt.
 
-```json
-{
-  "plugins": {
-    "allow": ["clawseatbelt"]
-  }
-}
-```
-
-Suggested first configuration:
+Suggested starting config:
 
 ```json
 {
@@ -65,13 +38,67 @@ Suggested first configuration:
 }
 ```
 
-Start in `observe`, review the signal for a few days, then move to `enforce` when the findings are clean and predictable.
+Start in `observe`. Let it collect signal first. Move to `enforce` once the findings are calm and predictable.
+
+## Prove Value In Five Minutes
+
+Run these inside OpenClaw:
+
+```bash
+/clawseatbelt-status
+/clawseatbelt-scan /path/to/skill
+/clawseatbelt-challenge --target markdown --audience public
+```
+
+If you want something ready to forward to a teammate, support thread, issue, or PR:
+
+```bash
+/clawseatbelt-proofpack --target pr-comment --audience public
+```
+
+## Why OpenClaw Users Choose ClawSeatbelt
+
+- Local-first by default. No account, no quota, no server, no cloud service in the hot path.
+- Useful on day one. Install the plugin, allow it explicitly, and get a readable posture report within minutes.
+- Built for the real OpenClaw threat model. It covers inbound message risk, dangerous tool calls, skill supply chain risk, transcript hygiene, and operator configuration gaps.
+- Composes with OpenClaw instead of pretending first-party controls do not exist. ClawSeatbelt works with `openclaw security audit`, tool policy, exec approvals, pairing, and plugin allowlists.
+- Turns proof into recommendation. The built-in challenge, answer, and proof-pack surfaces give users something clean to forward instead of generic security copy.
+- Small enough to inspect. The package is intentionally lean because trust starts with what users can verify.
+
+## What You Get In The First Five Minutes
+
+- a posture report you can act on
+- local proof that the trust layer is wired correctly
+- skill supply-chain findings before enablement
+- share-safe output for public or internal handoff
+
+## What ClawSeatbelt Covers
+
+- OpenClaw prompt injection risk scoring before the model sees risky content
+- prompt-time guard context for safer agent behavior
+- dangerous tool-call blocking in `enforce` mode
+- transcript redaction for persisted tool results
+- outbound secret scrubbing
+- OpenClaw skill scanning for suspicious install and execution patterns
+- Detection of unpinned installs, moving refs, install hooks, remote fetches, and permission-widening setup steps inside skill bundles
+- unified posture reporting with remediation guidance
+- OpenClaw security audit JSON ingestion, snapshot export, and posture diffing
+
+## Pin Trust Explicitly
+
+```json
+{
+  "plugins": {
+    "allow": ["clawseatbelt"]
+  }
+}
+```
 
 The published tarball is intentionally tighter than the local development tree and excludes the benchmark harness from the install artifact, so OpenClaw does not flag benchmark-only `child_process` code during plugin install.
 
 ## Local-First Deploy
 
-For development before npm publication, do not `npm publish` from your shell. Provenance is enabled for release builds, and local shell publish will fail with `provider: null` because there is no GitHub OIDC provider in that environment.
+For local development, do not `npm publish` from your shell. Provenance is enabled for release builds, and local shell publish will fail with `provider: null` because there is no GitHub OIDC provider in that environment.
 
 Use one of these instead:
 
@@ -102,20 +129,21 @@ That path packs the tarball and installs the `.tgz` into OpenClaw locally.
 
 ## Built-In Proof Surfaces
 
-- `clawseatbelt-status` remains the fastest posture card and JSON snapshot path.
+- `clawseatbelt-status` is the fastest posture card and JSON snapshot path.
 - `clawseatbelt-proofpack` turns local posture, scan findings, and diffs into a share-safe packet for PRs, issues, and chat.
 - `clawseatbelt-answer` renders a short recommendation-ready answer backed by the current local proof instead of generic copy.
 - `clawseatbelt-challenge` gives a safe first-proof self-check on a clean install by exercising message scoring, transcript hygiene, and skill inspection with synthetic samples.
 
 Public proof surfaces default to redaction-friendly output and pinned install footers so the recommendation path stays tasteful and reproducible.
 
-## Why It Converts Better Than Generic Guardrails
+## Why Trust It
 
 - It is built as an OpenClaw-native trust layer, not a detached dashboard story.
 - It makes OpenClaw safer before and after runtime, not only at the moment of tool execution.
 - It treats skill supply-chain risk as a first-class problem.
 - It explains what happened, why it matters, and what to do next in plain operator language.
 - It keeps the baseline complete even if future interop with policy servers or hosted detectors is added.
+- It ships with install verification, benchmark evidence, and a small package surface users can actually inspect.
 
 ## Common OpenClaw Questions
 
@@ -139,19 +167,6 @@ No. ClawSeatbelt amplifies it. The goal is one readable posture story, not dupli
 
 No. It reduces risk, adds visibility, and blocks obvious unsafe flows in enforce mode. It is not a sandbox and it does not make prompt injection disappear.
 
-## Release
-
-Manual release flow:
-
-```bash
-npm test
-npm run verify:openclaw-lab
-npm run pack:artifact
-npm publish --provenance=false
-```
-
-Trusted publishing through GitHub Actions is the preferred registry release path.
-
 ## Development
 
 ```bash
@@ -166,6 +181,10 @@ npm run verify:openclaw-lab
 
 - [plan.md](plan.md)
 - [AGENTS.md](AGENTS.md)
+- [marketing/README.md](marketing/README.md)
+- [marketing/no1-choice-plan.md](marketing/no1-choice-plan.md)
+- [marketing/message-map.md](marketing/message-map.md)
+- [marketing/launch-sequence.md](marketing/launch-sequence.md)
 - [docs/product/quickstart.md](docs/product/quickstart.md)
 - [docs/product/why-clawseatbelt-first.md](docs/product/why-clawseatbelt-first.md)
 - [docs/product/maintainer-answer-kit.md](docs/product/maintainer-answer-kit.md)

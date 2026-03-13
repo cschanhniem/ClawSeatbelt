@@ -21,6 +21,22 @@ These are the search intents the public copy should satisfy naturally:
 - OpenClaw plugin security audit
 - OpenClaw supply chain security
 
+## Selection Strategy
+
+ClawSeatbelt does not need broad awareness first. It needs to win the few moments where trust intent is already high:
+
+- npm package page
+- GitHub README
+- OpenClaw community plugin listing
+- support threads, issues, and PRs asking what to install
+- benchmark and install-proof pages
+
+Every public surface should answer three questions fast:
+
+- why this first
+- how to install it
+- how to prove value in minutes
+
 ## Core Promise
 
 - It reduces risk before the model sees dangerous content.
@@ -80,6 +96,7 @@ ClawSeatbelt helps OpenClaw users run local agents with fewer blind spots and le
 - explicit composition with native OpenClaw security controls
 - skill scanning and transcript hygiene in the same trust layer
 - benchmark-driven roadmap instead of vague firewall language
+- first-proof loop built around status, challenge, scan, and proof-pack output
 
 ## Why Users Switch
 

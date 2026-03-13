@@ -2,14 +2,15 @@
 
 ## Summary
 
-ClawSeatbelt `<version>` improves OpenClaw baseline trust with local-first guardrails, clearer operator posture, and no hosted dependency in the hot path.
+ClawSeatbelt `<version>` makes the first OpenClaw trust decision easier. This release improves the local-first baseline, sharpens first proof, and gives operators clearer evidence they can forward.
 
 ## Why This Release Matters
 
 Use one tight paragraph that answers a user’s real question:
 
 - what got safer
-- what got easier to understand
+- what got easier to prove
+- what got easier to recommend
 - what changed in install, policy, or runtime behavior
 
 ## Highlights
@@ -19,6 +20,7 @@ Use one tight paragraph that answers a user’s real question:
 - outbound and persisted secret redaction
 - local skill scanning
 - posture reporting and operator commands
+- any change that improves the five-minute proof loop
 
 ## Install
 
@@ -31,6 +33,20 @@ openclaw plugins install clawseatbelt@<version>
 - Start in `observe` mode, then move to `enforce` after a low-noise soak.
 - Pin `plugins.allow` explicitly.
 - Pair ClawSeatbelt with native OpenClaw security audit, tool policy, and approval controls.
+
+## First Proof
+
+Point people to one fast check:
+
+```bash
+/clawseatbelt-status
+```
+
+If the release improved proof or recommendation surfaces, also call out:
+
+```bash
+/clawseatbelt-challenge --target markdown --audience public
+```
 
 ## Notes
 

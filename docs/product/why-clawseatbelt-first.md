@@ -82,18 +82,27 @@ That lab currently shows:
 - PolicyShield stays tiny but depends on a reachable server
 - SecureClaw and Berry Shield trip the OpenClaw installer's dangerous-pattern scanner on their packaged artifacts
 
-## Where It Is Still Not Finished
+ClawSeatbelt is also live on npm, so the first-install path is no longer hypothetical:
+
+```bash
+openclaw plugins install clawseatbelt@0.1.2
+openclaw config set --strict-json plugins.allow '["clawseatbelt"]'
+openclaw config set --strict-json plugins.entries.clawseatbelt.enabled true
+openclaw gateway restart
+```
+
+## Where It Still Needs More Proof
 
 ClawSeatbelt is stronger after the current proof-surface and scanner upgrades, but there are still honest gaps:
 
-- no published live benchmark harness yet
 - no shared-corpus runtime efficacy shootout from the same OpenClaw lab yet
-- no published npm package yet
 - no public artifact gallery yet
+- no mature screenshot or terminal-capture set on the public listing yet
+- no shared benchmark page that compares live runtime outcomes across all top competitors yet
 
 So the truthful claim today is:
 
-> ClawSeatbelt is the strongest local-first OpenClaw trust baseline in the current live install lab, but it is not yet fully proven number one until the shared-corpus runtime benchmark and public install path are finished.
+> ClawSeatbelt is the strongest local-first OpenClaw trust baseline in the current live install lab, with a live npm package and a clean first-proof loop. It still needs the shared-corpus runtime benchmark and stronger public evidence surfaces to be fully proven number one overall.
 
 ## What To Run
 

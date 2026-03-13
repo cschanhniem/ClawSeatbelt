@@ -32,6 +32,7 @@ Start here, in order:
 16. [docs/benchmarks/competitor-artifact-benchmark.md](docs/benchmarks/competitor-artifact-benchmark.md)
 17. Latest task log in [tasks](tasks)
 18. [docs/architecture/local-deploy.md](docs/architecture/local-deploy.md)
+19. [marketing/no1-choice-plan.md](marketing/no1-choice-plan.md)
 
 ## Non-Negotiables
 
@@ -54,6 +55,7 @@ Start here, in order:
 - `docs/architecture`: state machines, sequence diagrams, data flow, and system decisions.
 - `docs/product`: positioning, differentiation, and launch logic.
 - `docs/benchmarks`: competitor artifact and integration benchmarks.
+- `marketing`: message architecture, launch sequencing, and default-choice plan.
 - `tasks`: dated work logs.
 - `test`: focused fixtures and regression coverage.
 

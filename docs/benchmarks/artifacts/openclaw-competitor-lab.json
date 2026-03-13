@@ -1,18 +1,18 @@
 {
-  "generatedAt": "2026-03-12T18:04:51.062Z",
+  "generatedAt": "2026-03-13T05:15:11.360Z",
   "openclawVersion": "2026.3.11",
   "entries": [
     {
       "label": "ClawSeatbelt",
       "packageName": "clawseatbelt",
-      "version": "0.1.0",
+      "version": "0.1.2",
       "homepage": "https://github.com/cschanhniem/ClawSeatbelt#readme",
       "description": "Local-first trust plugin for OpenClaw",
       "installKind": "local-tarball",
       "package": {
-        "filename": "clawseatbelt-0.1.0.tgz",
-        "packedBytes": 31351,
-        "unpackedBytes": 128091,
+        "filename": "clawseatbelt-0.1.2.tgz",
+        "packedBytes": 32232,
+        "unpackedBytes": 130842,
         "entryCount": 49
       },
       "plugin": {
@@ -27,7 +27,7 @@
         "configSchema": true
       },
       "install": {
-        "durationMs": 2389,
+        "durationMs": 2505,
         "allowlistPinned": true,
         "installRecordPresent": true
       },
@@ -68,7 +68,7 @@
         "configSchema": true
       },
       "install": {
-        "durationMs": 17113,
+        "durationMs": 16580,
         "allowlistPinned": true,
         "installRecordPresent": true
       },
@@ -111,7 +111,7 @@
         "configSchema": true
       },
       "install": {
-        "durationMs": 12647,
+        "durationMs": 12767,
         "allowlistPinned": true,
         "installRecordPresent": true
       },
@@ -154,7 +154,7 @@
         "configSchema": true
       },
       "install": {
-        "durationMs": 1513,
+        "durationMs": 1580,
         "allowlistPinned": true,
         "installRecordPresent": true
       },
@@ -197,7 +197,7 @@
         "configSchema": true
       },
       "install": {
-        "durationMs": 20639,
+        "durationMs": 11049,
         "allowlistPinned": true,
         "installRecordPresent": true
       },
@@ -220,6 +220,6 @@
     "localBaselineWinner": "ClawSeatbelt currently leads the local-first baseline on install-path evidence.",
     "cleanLocalInstallWinner": "ClawSeatbelt currently leads the clean local install story in this run.",
     "cleanInstallWinner": "PolicyShield currently leads the clean-install artifact story in this run.",
-    "publicationGap": "ClawSeatbelt still lacks a public npm release, so category leadership is not fully proven until the package is published."
+    "publicationGap": "ClawSeatbelt is published on npm. Publication is no longer the main credibility gap."
   }
 }

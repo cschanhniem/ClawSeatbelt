@@ -1,6 +1,6 @@
 # OpenClaw Competitor Lab
 
-Generated at: 2026-03-12T18:04:51.062Z
+Generated at: 2026-03-13T05:15:11.360Z
 OpenClaw version: 2026.3.11
 
 ## Method
@@ -14,7 +14,7 @@ OpenClaw version: 2026.3.11
 
 | Package | Version | Packed Size | Hooks | Commands | Local-First Baseline | Install Warning | Notable Signal |
 |---|---:|---:|---:|---:|---|---|---|
-| ClawSeatbelt | 0.1.0 | 31351 B | 5 | 7 | yes | no | Clean local baseline |
+| ClawSeatbelt | 0.1.2 | 32232 B | 5 | 7 | yes | no | Clean local baseline |
 | MoltGuard | 6.8.21 | 1697329 B | 24 | 9 | no | no | Hosted service or account signal |
 | SecureClaw | 2.2.0 | 102921 B | 1 | 1 | yes | yes | Installer flagged dangerous patterns |
 | PolicyShield | 0.14.0 | 6999 B | 3 | 0 | no | no | Server dependency signal |
@@ -26,7 +26,7 @@ OpenClaw version: 2026.3.11
 - ClawSeatbelt local baseline verdict: ClawSeatbelt currently leads the local-first baseline on install-path evidence.
 - ClawSeatbelt clean local install verdict: ClawSeatbelt currently leads the clean local install story in this run.
 - Smallest clean install across all packages: PolicyShield currently leads the clean-install artifact story in this run.
-- Publication gap: ClawSeatbelt still lacks a public npm release, so category leadership is not fully proven until the package is published.
+- Publication gap: ClawSeatbelt is published on npm. Publication is no longer the main credibility gap.
 
 ## Package Notes
 

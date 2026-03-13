@@ -1,7 +1,7 @@
 {
   "id": "clawseatbelt",
   "name": "ClawSeatbelt",
-  "description": "OpenClaw security plugin with local-first risk scoring, tool guardrails, skill inspection, transcript redaction, and posture reporting.",
+  "description": "Local-first OpenClaw trust plugin with posture, skill inspection, transcript hygiene, and risky-session guardrails.",
   "version": "0.1.2",
   "configSchema": {
     "type": "object",

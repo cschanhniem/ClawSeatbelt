@@ -1,18 +1,19 @@
-# OpenClaw Security Quickstart
+# OpenClaw Quickstart
 
-This is the fastest path to a safer OpenClaw setup with ClawSeatbelt.
+This is the fastest path from install to first proof with ClawSeatbelt.
 
 ## 1. Install The Plugin
-
-Once the package is published:
 
 ```bash
 openclaw plugins install clawseatbelt@0.1.2
 openclaw config set --strict-json plugins.allow '["clawseatbelt"]'
 openclaw config set --strict-json plugins.entries.clawseatbelt.enabled true
+openclaw gateway restart
 ```
 
-For local-first development before npm publication:
+OpenClaw does not hot-load the plugin into an already running gateway. Restart it after the install, allowlist, and enabled writes land. On a fresh OpenClaw home, the first install command may briefly warn that `plugins.allow` is empty before the allowlist command runs. That warning is expected.
+
+For local repository development:
 
 ```bash
 npm run deploy:local
@@ -39,6 +40,8 @@ Pin plugin trust in your OpenClaw config:
 ```
 
 If you install into a blank OpenClaw home and skip the allowlist step, OpenClaw will warn that non-bundled plugins are discoverable. That is expected. Pin the allowlist immediately so the warning disappears for the right reason.
+
+If OpenClaw also prints doctor warnings about other integrations or channel policy, those are separate from ClawSeatbelt. Handle them as normal OpenClaw configuration issues.
 
 ## 3. Start In Observe Mode
 
@@ -85,7 +88,17 @@ You should see a compact posture summary that explains:
 
 If you pass a prior snapshot with `--diff-file`, ClawSeatbelt will show whether trust posture improved or regressed.
 
-## 5. Scan Skills Before You Trust Them
+## 5. Get First Proof Fast
+
+Run:
+
+```bash
+/clawseatbelt-challenge --target markdown --audience public
+```
+
+This is the fastest proof loop on a clean install. It checks that the local protection layers are wired, then points the operator back toward real posture and skill work.
+
+## 6. Scan Skills Before You Trust Them
 
 Run:
 
@@ -98,7 +111,7 @@ Use this before enabling a skill, especially if the bundle pulls remote scripts,
 The current scanner also flags unpinned installers, `latest` or branch-based installs, `preinstall` or `postinstall` hooks, and setup steps that widen OpenClaw permissions.
 
 
-## 6. Export A Share-Safe Proof Pack
+## 7. Export A Share-Safe Proof Pack
 
 Once you have posture and scan signal, render a packet you can forward without cleanup:
 
@@ -113,16 +126,6 @@ For a one-paragraph recommendation answer:
 ```
 
 These surfaces are built for support threads, PRs, issues, and team handoffs. Public mode keeps secrets and local paths out of the artifact by default.
-
-## 7. Run The First-Proof Trust Challenge
-
-On a clean install, you can prove the local defenses are wired without waiting for a live incident:
-
-```bash
-/clawseatbelt-challenge --target markdown --audience public
-```
-
-This is synthetic on purpose. It verifies that the main protective layers are active, then tells the operator to follow up with real posture and benchmark work.
 
 ## 8. Move To Enforce When The Signal Is Clean
 

@@ -4,7 +4,7 @@ For the newer live loader benchmark, see [openclaw-competitor-lab.md](openclaw-c
 
 ## Method
 
-This benchmark was run locally on 2026-03-12 using live npm artifacts:
+This benchmark was refreshed on 2026-03-13 using live npm artifacts and the current local ClawSeatbelt tarball:
 
 - `npm pack @openguardrails/moltguard`
 - `npm pack @adversa/secureclaw`
@@ -25,7 +25,7 @@ This is an artifact and integration benchmark, not a runtime efficacy shootout. 
 
 | Package | Version | Package Footprint | Package Surface | External Requirement | Verified Notes |
 |---|---:|---:|---|---|---|
-| ClawSeatbelt | 0.1.0 | ~23.8 KB tarball, ~180 KB built `dist/` | local plugin core | none | `openclaw.extensions` points to `dist/openclaw.js`; no runtime deps |
+| ClawSeatbelt | 0.1.2 | ~32.2 KB tarball, ~130.9 KB unpacked package | local plugin core | none | `openclaw.extensions` points to `dist/openclaw.js`; no runtime deps |
 | MoltGuard | 6.8.21 | 7.1 MB | plugin + gateway + dashboard + scripts | OpenGuardrails Core account/quota | README states auto-registration with Core and 500 free checks/day |
 | SecureClaw | 2.2.0 | 472 KB | plugin + skill + shell scripts + IOC/templates | none for baseline | README advertises audits, hardening, background monitors, and script-heavy skill deployment |
 | PolicyShield | 0.14.0 | 24 KB | thin plugin client | PolicyShield server | README defaults to `http://localhost:8100`, YAML rules, fail-open option |
@@ -36,11 +36,13 @@ This is an artifact and integration benchmark, not a runtime efficacy shootout. 
 
 ClawSeatbelt can credibly own the smallest trustworthy baseline:
 
-- tiny package
+- lean package
 - no server dependency
 - no account
 - no bundled dashboard
 - no skill-installer sprawl
+
+The live competitor lab is still the stronger proof page because it measures the real OpenClaw loader against current published artifacts. This artifact review matters as supporting evidence for package shape and operational surface.
 
 That is a meaningful differentiator in a category where trust is the product.
 

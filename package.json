@@ -1,7 +1,7 @@
 {
   "name": "clawseatbelt",
   "version": "0.1.2",
-  "description": "OpenClaw security plugin for local-first prompt injection defense, skill scanning, transcript redaction, and posture reporting.",
+  "description": "Local-first OpenClaw trust plugin for prompt-injection risk scoring, skill scanning, transcript hygiene, and posture reporting in minutes.",
   "homepage": "https://github.com/cschanhniem/ClawSeatbelt#readme",
   "bugs": {
     "url": "https://github.com/cschanhniem/ClawSeatbelt/issues"
@@ -68,6 +68,13 @@
     "openclaw",
     "openclaw-plugin",
     "openclaw-security",
+    "openclaw-trust-plugin",
+    "openclaw-security-plugin",
+    "openclaw-prompt-injection-protection",
+    "openclaw-skill-scanner",
+    "openclaw-transcript-redaction",
+    "openclaw-posture-report",
+    "openclaw-supply-chain-security",
     "security",
     "plugin",
     "local-first",

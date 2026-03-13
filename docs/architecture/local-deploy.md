@@ -20,7 +20,8 @@ stateDiagram-v2
   InstallTarball --> EnsureAllowlist
   EnsureAllowlist --> EnablePlugin
   EnablePlugin --> InspectInstall
-  InspectInstall --> Ready
+  InspectInstall --> RestartGateway
+  RestartGateway --> Ready
   Ready --> [*]
   BuildRepo --> Failed
   PackArtifact --> Failed
@@ -29,6 +30,7 @@ stateDiagram-v2
   EnsureAllowlist --> Failed
   EnablePlugin --> Failed
   InspectInstall --> Failed
+  RestartGateway --> Failed
   Failed --> [*]
 ```
 
@@ -56,6 +58,9 @@ sequenceDiagram
   Script->>OC: openclaw plugins list --json
   OC->>Home: write plugin entry and config
   Script-->>Dev: source path, commands, hooks, next step
+  Dev->>OC: openclaw gateway restart
+  OC->>Home: reload enabled plugins into the running gateway
+  Dev->>OC: /clawseatbelt-status
 ```
 
 ## Data Flow
@@ -69,10 +74,14 @@ flowchart LR
   E --> F[plugins.entries.clawseatbelt.enabled = true]
   F --> G[openclaw plugins list --json]
   G --> H[deploy summary]
+  H --> I[gateway restart]
+  I --> J[live plugin session]
 ```
 
 ## Notes
 
 - `link` mode is the fastest inner loop and points OpenClaw at the repository checkout.
 - `pack` mode is the safer release rehearsal because it exercises the tarball OpenClaw actually installs.
+- OpenClaw can warn that `plugins.allow` is empty during the initial install before the allowlist write runs. That warning is transient on a clean first install.
+- The deploy script confirms install metadata immediately, but a running gateway still needs a restart before the plugin becomes active in the live session.
 - Local terminal publishing is a different path. If `publishConfig.provenance` is enabled, local `npm publish` fails with `provider: null` because there is no GitHub OIDC provider in a plain shell session.

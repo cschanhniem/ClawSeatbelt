@@ -51,7 +51,12 @@ Then verify install in a disposable OpenClaw instance:
 
 ```bash
 openclaw plugins install clawseatbelt@0.1.2
+openclaw config set --strict-json plugins.allow '["clawseatbelt"]'
+openclaw config set --strict-json plugins.entries.clawseatbelt.enabled true
+openclaw gateway restart
 ```
+
+On a blank OpenClaw home, the install step may briefly warn that `plugins.allow` is empty before the allowlist command runs. Keep going. The plugin becomes live after the gateway restart.
 
 ## Automated Publish
 
