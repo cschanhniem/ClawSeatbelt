@@ -21,5 +21,5 @@ Move the release path from token-based npm publishing to npm trusted publishing 
 ## npm-Side Setup Still Required
 
 - Configure npm trusted publishing for repository `cschanhniem/ClawSeatbelt`.
-- Use workflow file `.github/workflows/release.yml`.
+- Use workflow filename `release.yml`.
 - After configuration, rerun the `Publish` workflow manually from `main` or publish with a new tag.

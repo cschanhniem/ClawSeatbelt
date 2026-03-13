@@ -4,7 +4,7 @@
 
 1. Confirm `clawseatbelt` is still unpublished or owned by you on npm.
 2. Prefer npm trusted publishing for GitHub Actions instead of `NPM_TOKEN`.
-3. On npm, configure a trusted publisher for `cschanhniem/ClawSeatbelt` and the workflow file `.github/workflows/release.yml`.
+3. On npm, configure a trusted publisher for `cschanhniem/ClawSeatbelt` and workflow filename `release.yml`.
 4. Confirm the version in `package.json`, `openclaw.plugin.json`, and `CHANGELOG.md` all agree.
 5. Confirm the package still targets the current OpenClaw release line.
 
@@ -49,7 +49,7 @@ Branch guardrails:
 Required GitHub configuration:
 
 - npm trusted publisher bound to `cschanhniem/ClawSeatbelt`
-- workflow filename set to `.github/workflows/release.yml`
+- workflow filename set to `release.yml`
 - GitHub-hosted runner
 - `id-token: write` permission in the workflow
 
@@ -77,7 +77,7 @@ Pick a new name before publishing. Do not force a confusing collision.
 Check the trusted publisher configuration on npm carefully:
 
 - repository owner and name must match exactly
-- workflow filename must match exactly, including `.yml`
+- workflow filename must match exactly, including `.yml`, and should be entered as `release.yml`
 - publish must run on a GitHub-hosted runner
 - the workflow must keep `id-token: write`
 
