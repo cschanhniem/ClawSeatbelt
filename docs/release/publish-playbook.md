@@ -34,6 +34,11 @@ openclaw plugins install clawseatbelt@0.1.0
 
 This repo includes a release workflow that publishes on tags matching `v*` and also supports manual `workflow_dispatch` runs from GitHub Actions.
 
+Branch guardrails:
+
+- tag publishes only proceed if the tagged commit is reachable from `main`
+- manual publishes only proceed when the workflow is run against `main`
+
 Required GitHub repository secret:
 
 - `NPM_TOKEN` as an npm automation token
