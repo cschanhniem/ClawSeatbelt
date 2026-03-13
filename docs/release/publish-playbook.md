@@ -38,6 +38,8 @@ npm run pack:artifact
 npm publish --provenance=false
 ```
 
+If that local fallback returns `EOTP`, your npm account still enforces write-time 2FA for publish. Use a valid one-time password with `--otp=<code>`, or switch the account to an automation-token or trusted-publishing flow that does not require interactive OTP in CI.
+
 ## Recommended Post-Publish Checks
 
 ```bash
@@ -94,6 +96,17 @@ Check the trusted publisher configuration on npm carefully:
 - workflow filename must match exactly, including `.yml`, and should be entered as `release.yml`
 - publish must run on a GitHub-hosted runner
 - the workflow must keep `id-token: write`
+
+### npm publish fails with `404 Not Found - PUT https://registry.npmjs.org/clawseatbelt`
+
+This usually means the GitHub workflow identity is not authorized to publish the existing package, even if the package name resolves publicly.
+
+Check:
+
+- the npm package `clawseatbelt` is owned by the same npm account that configured trusted publishing
+- the trusted publisher is attached to the existing package, not only created generically at the account level
+- repository owner, repository name, and workflow filename match the npm trusted publisher entry exactly
+- no stale publish token or environment override is shadowing the intended trusted-publishing path
 
 Inference:
 
