@@ -4,8 +4,9 @@
 
 1. Confirm `clawseatbelt` is still unpublished or owned by you on npm.
 2. Configure npm authentication locally or set `NPM_TOKEN` in GitHub Actions secrets.
-3. Confirm the version in `package.json`, `openclaw.plugin.json`, and `CHANGELOG.md` all agree.
-4. Confirm the package still targets the current OpenClaw release line.
+3. If you publish through GitHub Actions, make sure `NPM_TOKEN` is an npm automation token or use npm trusted publishing. A standard token on an account with publish-time 2FA will fail with `EOTP`.
+4. Confirm the version in `package.json`, `openclaw.plugin.json`, and `CHANGELOG.md` all agree.
+5. Confirm the package still targets the current OpenClaw release line.
 
 ## Manual Publish
 
@@ -35,19 +36,24 @@ This repo includes a release workflow that publishes on tags matching `v*`.
 
 Required GitHub repository secret:
 
-- `NPM_TOKEN`
+- `NPM_TOKEN` as an npm automation token
 
 Recommended flow:
 
 1. Merge the release commit to `main`.
 2. Create and push a tag like `v0.1.0`.
 3. Let GitHub Actions run CI, then publish to npm.
+4. If the publish run fails with `EOTP`, rotate `NPM_TOKEN` to an automation token and rerun the failed workflow.
 
 ## If The Publish Fails
 
 ### Package name already exists
 
 Pick a new name before publishing. Do not force a confusing collision.
+
+### npm publish fails with `EOTP`
+
+The current npm secret is not automation-capable for publish. Replace `NPM_TOKEN` with an npm automation token, or configure npm trusted publishing for this repository, then rerun the failed release workflow.
 
 ### Tarball misses `dist/openclaw.js`
 
