@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-03-12T17:46:38.104Z",
+  "generatedAt": "2026-03-13T04:47:03.903Z",
   "openclawVersion": "2026.3.11",
   "packageCheck": {
     "passed": true,
-    "filename": "clawseatbelt-0.1.0.tgz",
-    "size": 31289,
-    "unpackedSize": 127715,
+    "filename": "clawseatbelt-0.1.1.tgz",
+    "size": 31740,
+    "unpackedSize": 129217,
     "includesBenchmarkFiles": false
   },
   "installCheck": {

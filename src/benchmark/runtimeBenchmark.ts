@@ -73,6 +73,7 @@ const competitorPackages = [
   "@policyshield/openclaw-plugin",
   "@f4bioo/berry-shield"
 ] as const;
+const npmViewTimeoutMs = 2000;
 
 const redactionSamples = [
   {
@@ -180,11 +181,19 @@ function parseNpmViewOutput(raw: string): Omit<CompetitorPackageMetadata, "packa
 }
 
 function readCompetitorPackages(): CompetitorPackageMetadata[] {
+  const npmCacheDir = join(process.cwd(), ".tmp", "npm-cache");
+  mkdirSync(npmCacheDir, { recursive: true });
+
   return competitorPackages.map((packageName) => {
     try {
       const raw = execFileSync("npm", ["view", packageName, "version", "description", "homepage"], {
+        env: {
+          ...process.env,
+          NPM_CONFIG_CACHE: process.env.NPM_CONFIG_CACHE ?? npmCacheDir
+        },
         encoding: "utf8",
-        stdio: ["ignore", "pipe", "pipe"]
+        stdio: ["ignore", "pipe", "pipe"],
+        timeout: npmViewTimeoutMs
       });
       return {
         packageName,

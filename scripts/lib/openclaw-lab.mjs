@@ -1,17 +1,31 @@
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 export const scriptDir = dirname(fileURLToPath(import.meta.url));
 export const workspaceRoot = resolve(scriptDir, "..", "..");
+const npmCacheDir = join(workspaceRoot, ".tmp", "npm-cache");
+
+function buildCommandEnv(command, env) {
+  if ((command === "npm" || command === "npx") && !("NPM_CONFIG_CACHE" in env) && !process.env.NPM_CONFIG_CACHE) {
+    mkdirSync(npmCacheDir, { recursive: true });
+    return {
+      ...process.env,
+      NPM_CONFIG_CACHE: npmCacheDir,
+      ...env
+    };
+  }
+
+  return { ...process.env, ...env };
+}
 
 export function run(command, args, env = {}, options = {}) {
   try {
     const stdout = execFileSync(command, args, {
       cwd: options.cwd ?? workspaceRoot,
-      env: { ...process.env, ...env },
+      env: buildCommandEnv(command, env),
       encoding: "utf8",
       stdio: ["ignore", "pipe", "pipe"]
     });

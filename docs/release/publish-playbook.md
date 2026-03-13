@@ -48,7 +48,7 @@ npm view clawseatbelt dist-tags --json
 Then verify install in a disposable OpenClaw instance:
 
 ```bash
-openclaw plugins install clawseatbelt@0.1.0
+openclaw plugins install clawseatbelt@0.1.1
 ```
 
 ## Automated Publish
@@ -70,7 +70,7 @@ Required GitHub configuration:
 Recommended flow:
 
 1. Merge the release commit to `main`.
-2. Create and push a tag like `v0.1.0`.
+2. Create and push a tag like `v0.1.1`.
 3. Let GitHub Actions run CI, then publish to npm.
 4. If the publish run fails with `Unable to authenticate`, re-check the npm trusted publisher fields exactly. npm matches repository and workflow filename case-sensitively.
 
@@ -97,7 +97,7 @@ Check the trusted publisher configuration on npm carefully:
 
 Inference:
 
-If npm does not let you bind trusted publishing before the first package release in your account UI, use a one-time automation token for `0.1.0`, then switch immediately to trusted publishing. That fallback depends on npm account UI behavior, which I have not verified directly from this account.
+If npm does not let you bind trusted publishing before the first package release in your account UI, use a one-time automation token for the first release, then switch immediately to trusted publishing. That fallback depends on npm account UI behavior, which I have not verified directly from this account.
 
 ### Tarball misses `dist/openclaw.js`
 

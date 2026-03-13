@@ -1,6 +1,6 @@
 # OpenClaw Install Verification
 
-Generated at: 2026-03-12T17:46:38.104Z
+Generated at: 2026-03-13T04:47:03.903Z
 OpenClaw version: 2026.3.11
 
 ## Verdict
@@ -12,9 +12,9 @@ OpenClaw version: 2026.3.11
 
 ## Package Surface
 
-- Tarball: `clawseatbelt-0.1.0.tgz`
-- Packed size: 31289 bytes
-- Unpacked size: 127715 bytes
+- Tarball: `clawseatbelt-0.1.1.tgz`
+- Packed size: 31740 bytes
+- Unpacked size: 129217 bytes
 - Benchmark files shipped: no
 
 ## Loaded Plugin Surface

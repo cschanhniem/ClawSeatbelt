@@ -6,15 +6,26 @@ import path from "node:path";
 
 const repoRoot = process.cwd();
 const pluginId = "clawseatbelt";
-const packageJsonPath = path.join(repoRoot, "package.json");
-const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
 const mode = process.argv.includes("--pack") ? "pack" : "link";
 const openClawHome = process.env.OPENCLAW_HOME ?? "(default)";
+const npmCacheDir = path.join(repoRoot, ".tmp", "npm-cache");
+
+function buildCommandEnv(command) {
+  if ((command === "npm" || command === "npx") && !process.env.NPM_CONFIG_CACHE) {
+    fs.mkdirSync(npmCacheDir, { recursive: true });
+    return {
+      ...process.env,
+      NPM_CONFIG_CACHE: npmCacheDir
+    };
+  }
+
+  return process.env;
+}
 
 function run(command, args, options = {}) {
   const result = spawnSync(command, args, {
     cwd: repoRoot,
-    env: process.env,
+    env: buildCommandEnv(command),
     encoding: "utf8",
     stdio: options.capture ? ["inherit", "pipe", "pipe"] : "inherit"
   });
@@ -40,7 +51,7 @@ function getAllowlist() {
     ["openclaw", "config", "get", "plugins.allow", "--json"],
     {
       cwd: repoRoot,
-      env: process.env,
+      env: buildCommandEnv("npx"),
       encoding: "utf8"
     }
   );

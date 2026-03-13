@@ -19,14 +19,14 @@ Artifact verification was run locally on 2026-03-13 using:
 - `npm test`
 - `npm run verify:openclaw-lab`
 - `npm pack --json --pack-destination .tmp/pack`
-- `tar -tf .tmp/pack/clawseatbelt-0.1.0.tgz`
+- `tar -tf .tmp/pack/clawseatbelt-0.1.1.tgz`
 
 Verified package facts:
 
-- package: `clawseatbelt@0.1.0`
-- tarball size: about `31.3 KB`
+- package: `clawseatbelt@0.1.1`
+- tarball size: about `31.7 KB`
 - built `dist/` footprint in this workspace: about `260 KB`
-- unpacked published package footprint: about `127.7 KB`
+- unpacked published package footprint: about `129.2 KB`
 - OpenClaw entry path: `dist/openclaw.js`
 - peer dependency: `openclaw ^2026.3.11`
 - install-path verifier: packaged plugin installs into an isolated OpenClaw home without dangerous-pattern warnings
