@@ -1,6 +1,6 @@
 # OpenClaw Install Verification
 
-Generated at: 2026-03-13T06:13:54.793Z
+Generated at: 2026-03-13T07:08:26.009Z
 OpenClaw version: 2026.3.11
 
 ## Verdict
@@ -12,16 +12,16 @@ OpenClaw version: 2026.3.11
 
 ## Package Surface
 
-- Tarball: `clawseatbelt-0.1.3.tgz`
-- Packed size: 34727 bytes
-- Unpacked size: 141446 bytes
+- Tarball: `clawseatbelt-0.1.4.tgz`
+- Packed size: 35201 bytes
+- Unpacked size: 143304 bytes
 - Benchmark files shipped: no
 
 ## Loaded Plugin Surface
 
 - Status: loaded
 - Origin: global
-- Commands: clawseatbelt-status, clawseatbelt-mode, clawseatbelt-scan, clawseatbelt-explain, clawseatbelt-proofpack, clawseatbelt-answer, clawseatbelt-challenge
+- Commands: csb_status, csb_mode, csb_scan, csb_explain, csb_proof, csb_answer, csb_check
 - Services: clawseatbelt-maintenance
 - Hook count: 5
 - Config schema present: yes

@@ -4,7 +4,7 @@
 
 ClawSeatbelt should turn one operator's local proof into a compact packet another operator can act on. The proof pack is the highest-leverage distribution surface because it solves a trust decision in the exact places where OpenClaw users ask for help.
 
-Current runtime surface: `/clawseatbelt-proofpack`
+Current runtime surface: `/csb_proof`
 
 ## State Machine
 

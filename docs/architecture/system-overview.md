@@ -74,20 +74,20 @@ sequenceDiagram
   Channel->>Adapter: before_tool_call
   Adapter->>State: resolve session risk
   Adapter-->>Channel: allow or block dangerous tools
-  Channel->>Adapter: /clawseatbelt-status --audit-file --diff-file
+  Channel->>Adapter: /csb_status --audit-file --diff-file
   Adapter->>Audit: normalize audit json (optional)
   Audit-->>Adapter: audit findings
   Adapter->>Report: build posture snapshot + diff
   Report-->>Adapter: posture card, snapshot, diff
   Adapter->>Export: render requested export form
   Export-->>Adapter: share-safe status artifact
-  Adapter->>ProofPack: compose artifacts for /clawseatbelt-proofpack
+  Adapter->>ProofPack: compose artifacts for /csb_proof
   ProofPack-->>Adapter: proof pack output
   Adapter->>Moat: publish reusable artifact inputs when explicitly requested
   Moat-->>Adapter: benchmark, archive, or contribution-ready material
-  Adapter->>Answer: build thread-ready recommendation for /clawseatbelt-answer
+  Adapter->>Answer: build thread-ready recommendation for /csb_answer
   Answer-->>Adapter: concise answer with proof reference
-  Adapter->>Challenge: run /clawseatbelt-challenge synthetic checks
+  Adapter->>Challenge: run /csb_check synthetic checks
   Challenge-->>Adapter: first-proof report
   Benchmark-->>Channel: benchmark markdown and json artifacts when requested offline
   Adapter-->>Channel: shareable status message, proof pack, challenge report, or json export

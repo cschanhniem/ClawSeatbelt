@@ -22,13 +22,13 @@ test("plugin registers commands, service, and hooks", async () => {
   assert.deepEqual(
     api.commands.map((command) => command.name).sort(),
     [
-      "clawseatbelt-answer",
-      "clawseatbelt-challenge",
-      "clawseatbelt-explain",
-      "clawseatbelt-mode",
-      "clawseatbelt-proofpack",
-      "clawseatbelt-scan",
-      "clawseatbelt-status"
+      "csb_answer",
+      "csb_check",
+      "csb_explain",
+      "csb_mode",
+      "csb_proof",
+      "csb_scan",
+      "csb_status"
     ]
   );
   assert.deepEqual(
@@ -117,8 +117,8 @@ test("first prompt emits a one-time activation brief", async () => {
   );
 
   assert.match(first?.prependContext ?? "", /ClawSeatbelt activation brief/i);
-  assert.match(first?.prependContext ?? "", /\/clawseatbelt-(status|challenge)/);
-  assert.match(first?.prependContext ?? "", /\/clawseatbelt-proofpack --target chat --audience public/);
+  assert.match(first?.prependContext ?? "", /\/csb_(status|check)/);
+  assert.match(first?.prependContext ?? "", /\/csb_proof --target chat --audience public/);
   assert.equal(second, undefined);
 });
 
@@ -126,7 +126,7 @@ test("explicit ClawSeatbelt commands suppress the activation brief", async () =>
   const api = createMockApi();
   await clawSeatbeltPluginDefinition.register(api);
 
-  const statusCommand = api.commands.find((command) => command.name === "clawseatbelt-status");
+  const statusCommand = api.commands.find((command) => command.name === "csb_status");
   const beforePromptBuild = api.hooks.before_prompt_build?.[0];
 
   assert.ok(statusCommand);
@@ -134,7 +134,7 @@ test("explicit ClawSeatbelt commands suppress the activation brief", async () =>
 
   await statusCommand?.handler({
     channel: "telegram",
-    commandBody: "clawseatbelt-status",
+    commandBody: "csb_status",
     config: {},
     isAuthorizedSender: true
   });
@@ -153,13 +153,13 @@ test("explicit ClawSeatbelt commands suppress the activation brief", async () =>
 test("scan command reports suspicious skill bundles", async () => {
   const api = createMockApi();
   await clawSeatbeltPluginDefinition.register(api);
-  const scanCommand = api.commands.find((command) => command.name === "clawseatbelt-scan");
+  const scanCommand = api.commands.find((command) => command.name === "csb_scan");
 
   assert.ok(scanCommand);
 
   const result = await scanCommand?.handler({
     channel: "telegram",
-    commandBody: "clawseatbelt-scan test/fixtures/skills/malicious",
+    commandBody: "csb_scan test/fixtures/skills/malicious",
     args: join("test", "fixtures", "skills", "malicious"),
     config: {},
     isAuthorizedSender: true
@@ -173,11 +173,11 @@ test("scan command reports suspicious skill bundles", async () => {
 test("scan command fails cleanly for missing paths", async () => {
   const api = createMockApi();
   await clawSeatbeltPluginDefinition.register(api);
-  const scanCommand = api.commands.find((command) => command.name === "clawseatbelt-scan");
+  const scanCommand = api.commands.find((command) => command.name === "csb_scan");
 
   const result = await scanCommand?.handler({
     channel: "telegram",
-    commandBody: "clawseatbelt-scan missing-dir",
+    commandBody: "csb_scan missing-dir",
     args: "missing-dir",
     config: {},
     isAuthorizedSender: true
@@ -188,7 +188,7 @@ test("scan command fails cleanly for missing paths", async () => {
 });
 
 test("status command exports json posture and writes snapshots", async () => {
-  const root = mkdtempSync(join(tmpdir(), "clawseatbelt-status-"));
+  const root = mkdtempSync(join(tmpdir(), "csb_status-"));
   const auditPath = join(root, "audit.json");
   const previousPath = join(root, "previous.json");
   const snapshotPath = join(root, "snapshot.json");
@@ -233,11 +233,11 @@ test("status command exports json posture and writes snapshots", async () => {
     }
   });
   await clawSeatbeltPluginDefinition.register(api);
-  const statusCommand = api.commands.find((command) => command.name === "clawseatbelt-status");
+  const statusCommand = api.commands.find((command) => command.name === "csb_status");
 
   const result = await statusCommand?.handler({
     channel: "telegram",
-    commandBody: "clawseatbelt-status --json",
+    commandBody: "csb_status --json",
     args: `--json --audit-file "${auditPath}" --diff-file "${previousPath}" --write-snapshot "${snapshotPath}"`,
     config: {},
     isAuthorizedSender: true
@@ -264,11 +264,11 @@ test("status command points operators toward proof and sharing", async () => {
     }
   });
   await clawSeatbeltPluginDefinition.register(api);
-  const statusCommand = api.commands.find((command) => command.name === "clawseatbelt-status");
+  const statusCommand = api.commands.find((command) => command.name === "csb_status");
 
   const result = await statusCommand?.handler({
     channel: "telegram",
-    commandBody: "clawseatbelt-status",
+    commandBody: "csb_status",
     config: {},
     isAuthorizedSender: true
   });
@@ -278,7 +278,7 @@ test("status command points operators toward proof and sharing", async () => {
 });
 
 test("proofpack command renders a public-safe packet and writes it to disk", async () => {
-  const root = mkdtempSync(join(tmpdir(), "clawseatbelt-proofpack-"));
+  const root = mkdtempSync(join(tmpdir(), "csb_proof-"));
   const auditPath = join(root, "audit.json");
   const outputPath = join(root, "proofpack.md");
 
@@ -313,11 +313,11 @@ test("proofpack command renders a public-safe packet and writes it to disk", asy
     }
   });
   await clawSeatbeltPluginDefinition.register(api);
-  const proofpackCommand = api.commands.find((command) => command.name === "clawseatbelt-proofpack");
+  const proofpackCommand = api.commands.find((command) => command.name === "csb_proof");
 
   const result = await proofpackCommand?.handler({
     channel: "telegram",
-    commandBody: "clawseatbelt-proofpack",
+    commandBody: "csb_proof",
     args: `--audit-file "${auditPath}" --scan-path "${join("test", "fixtures", "skills", "malicious")}" --audience public --target pr-comment --write-file "${outputPath}"`,
     config: {},
     isAuthorizedSender: true
@@ -341,11 +341,11 @@ test("answer command renders a concise recommendation backed by local proof", as
     }
   });
   await clawSeatbeltPluginDefinition.register(api);
-  const answerCommand = api.commands.find((command) => command.name === "clawseatbelt-answer");
+  const answerCommand = api.commands.find((command) => command.name === "csb_answer");
 
   const result = await answerCommand?.handler({
     channel: "telegram",
-    commandBody: "clawseatbelt-answer",
+    commandBody: "csb_answer",
     args: "--target team --audience public",
     config: {},
     isAuthorizedSender: true
@@ -360,11 +360,11 @@ test("answer command renders a concise recommendation backed by local proof", as
 test("challenge command renders a first-proof report", async () => {
   const api = createMockApi();
   await clawSeatbeltPluginDefinition.register(api);
-  const challengeCommand = api.commands.find((command) => command.name === "clawseatbelt-challenge");
+  const challengeCommand = api.commands.find((command) => command.name === "csb_check");
 
   const result = await challengeCommand?.handler({
     channel: "telegram",
-    commandBody: "clawseatbelt-challenge",
+    commandBody: "csb_check",
     args: "--target chat --audience public",
     config: {},
     isAuthorizedSender: true

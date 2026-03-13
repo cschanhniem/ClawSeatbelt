@@ -34,7 +34,7 @@ sequenceDiagram
   participant Posture as Posture Engine
   participant Disk as Snapshot Store
 
-  Operator->>Adapter: /clawseatbelt-status --audit-file --diff-file --json
+  Operator->>Adapter: /csb_status --audit-file --diff-file --json
   Adapter->>Config: assess current OpenClaw config
   Adapter->>Audit: normalize audit JSON
   Audit-->>Adapter: audit findings

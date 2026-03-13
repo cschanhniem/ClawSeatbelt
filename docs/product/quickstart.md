@@ -5,7 +5,7 @@ This is the fastest path from install to first proof with ClawSeatbelt.
 ## 1. Install The Plugin
 
 ```bash
-openclaw plugins install clawseatbelt@0.1.3
+openclaw plugins install clawseatbelt@0.1.4
 openclaw config set --strict-json plugins.allow '["clawseatbelt"]'
 openclaw config set --strict-json plugins.entries.clawseatbelt.enabled true
 openclaw gateway restart
@@ -26,6 +26,37 @@ npm run deploy:local:pack
 ```
 
 `deploy:local` links the repository root into OpenClaw after building. `deploy:local:pack` installs the generated `.tgz` so you can test the same artifact shape OpenClaw will consume from npm.
+
+### Update An Existing Install
+
+If ClawSeatbelt is already installed from npm and you want the latest published release:
+
+```bash
+openclaw plugins update clawseatbelt
+openclaw gateway restart
+```
+
+If you prefer to pin an exact release:
+
+```bash
+openclaw plugins install clawseatbelt@0.1.4
+openclaw gateway restart
+```
+
+If you installed from this repository with a local link or local pack, refresh it by rerunning:
+
+```bash
+npm run deploy:local
+# or
+npm run deploy:local:pack
+```
+
+OpenClaw documents manual plugin update commands. ClawSeatbelt does not add a plugin-specific self-update toggle on top of that. If you want automation, use OpenClaw's optional gateway-wide auto-updater and treat it as a broader platform policy, not a per-plugin switch.
+
+Primary command family note:
+
+- `csb_*` is now the primary command set across OpenClaw.
+- `clawseatbelt-*` remains available only as a legacy compatibility alias.
 
 ## 2. Allow It Explicitly
 
@@ -91,16 +122,14 @@ If you want full silence on install, either use `quiet` mode or set:
 Run:
 
 ```bash
-/clawseatbelt-status
+/csb_status
 ```
 
 For machine-readable posture output or first-party audit ingestion:
 
 ```bash
-/clawseatbelt-status --json --audit-file ./openclaw-audit.json --write-snapshot ./clawseatbelt-posture.json
+/csb_status --json --audit-file ./openclaw-audit.json --write-snapshot ./clawseatbelt-posture.json
 ```
-
-If you are operating through Telegram, use `/csb_status` instead. Telegram bot commands do not accept hyphens.
 
 You should see a compact posture summary that explains:
 
@@ -115,7 +144,7 @@ If you pass a prior snapshot with `--diff-file`, ClawSeatbelt will show whether 
 Run:
 
 ```bash
-/clawseatbelt-challenge --target markdown --audience public
+/csb_check --target markdown --audience public
 ```
 
 This is the fastest proof loop on a clean install. It checks that the local protection layers are wired, then points the operator back toward real posture and skill work.
@@ -125,7 +154,7 @@ This is the fastest proof loop on a clean install. It checks that the local prot
 Run:
 
 ```bash
-/clawseatbelt-scan /path/to/skill
+/csb_scan /path/to/skill
 ```
 
 Use this before enabling a skill, especially if the bundle pulls remote scripts, expands permissions, or hides execution behind setup instructions.
@@ -138,13 +167,13 @@ The current scanner also flags unpinned installers, `latest` or branch-based ins
 Once you have posture and scan signal, render a packet you can forward without cleanup:
 
 ```bash
-/clawseatbelt-proofpack --audit-file ./openclaw-audit.json --target pr-comment --audience public
+/csb_proof --audit-file ./openclaw-audit.json --target pr-comment --audience public
 ```
 
 For a one-paragraph recommendation answer:
 
 ```bash
-/clawseatbelt-answer --target support --audience public
+/csb_answer --target support --audience public
 ```
 
 These surfaces are built for support threads, PRs, issues, and team handoffs. Public mode keeps secrets and local paths out of the artifact by default.
@@ -152,7 +181,7 @@ These surfaces are built for support threads, PRs, issues, and team handoffs. Pu
 If you want the lightest share path right after first proof:
 
 ```bash
-/clawseatbelt-proofpack --target chat --audience public
+/csb_proof --target chat --audience public
 ```
 
 ## 9. Move To Enforce When The Signal Is Clean
@@ -160,22 +189,21 @@ If you want the lightest share path right after first proof:
 After a low-noise soak, switch to:
 
 ```bash
-/clawseatbelt-mode enforce
+/csb_mode enforce
 ```
 
 `enforce` is where ClawSeatbelt starts blocking dangerous tool calls in risky sessions.
 
 ## Commands Worth Remembering
 
-- `clawseatbelt-status`
-- `clawseatbelt-mode <observe|enforce|quiet>`
-- `clawseatbelt-scan <path>`
-- `clawseatbelt-explain <finding-id>`
-- `clawseatbelt-proofpack --target <markdown|pr-comment|issue-comment|chat> --audience <public|internal|private>`
-- `clawseatbelt-answer --target <support|pr-review|issue|team> --audience <public|internal|private>`
-- `clawseatbelt-challenge --target <markdown|pr-comment|issue-comment|chat> --audience <public|internal|private>`
-- Use the slash form inside OpenClaw chat, for example `/clawseatbelt-status`.
-- On Telegram, use the native aliases instead: `/csb_status`, `/csb_mode`, `/csb_scan`, `/csb_explain`, `/csb_proof`, `/csb_answer`, `/csb_check`.
+- `csb_status`
+- `csb_mode <observe|enforce|quiet>`
+- `csb_scan <path>`
+- `csb_explain <finding-id>`
+- `csb_proof --target <markdown|pr-comment|issue-comment|chat> --audience <public|internal|private>`
+- `csb_answer --target <support|pr-review|issue|team> --audience <public|internal|private>`
+- `csb_check --target <markdown|pr-comment|issue-comment|chat> --audience <public|internal|private>`
+- Use the slash form inside OpenClaw chat, for example `/csb_status`.
 - For local deployment, use `npm run deploy:local` or `npm run deploy:local:pack` from the repository root.
 
 ## Best Pairings With Native OpenClaw Security

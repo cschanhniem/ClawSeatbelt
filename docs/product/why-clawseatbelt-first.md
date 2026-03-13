@@ -19,12 +19,12 @@ Choose ClawSeatbelt first when you want:
 
 ### 1. It Pays Back Immediately
 
-You can install ClawSeatbelt, run `/clawseatbelt-status`, and get a readable trust story without standing up a server, creating an account, or wiring a control plane.
+You can install ClawSeatbelt, run `/csb_status`, and get a readable trust story without standing up a server, creating an account, or wiring a control plane.
 
 If you want first proof on a clean machine, run:
 
 ```bash
-/clawseatbelt-challenge --target markdown --audience public
+/csb_check --target markdown --audience public
 ```
 
 That gives you a safe synthetic check that the local defenses are wired.
@@ -59,9 +59,9 @@ The fastest route to adoption is not a dashboard. It is a useful artifact.
 
 ClawSeatbelt now ships:
 
-- `/clawseatbelt-proofpack`
-- `/clawseatbelt-answer`
-- `/clawseatbelt-challenge`
+- `/csb_proof`
+- `/csb_answer`
+- `/csb_check`
 
 Those surfaces make it easier to justify a recommendation in a PR, issue, support thread, or team handoff.
 
@@ -85,7 +85,7 @@ That lab currently shows:
 ClawSeatbelt is also live on npm, so the first-install path is no longer hypothetical:
 
 ```bash
-openclaw plugins install clawseatbelt@0.1.3
+openclaw plugins install clawseatbelt@0.1.4
 openclaw config set --strict-json plugins.allow '["clawseatbelt"]'
 openclaw config set --strict-json plugins.entries.clawseatbelt.enabled true
 openclaw gateway restart
@@ -109,14 +109,14 @@ So the truthful claim today is:
 For a real first pass:
 
 ```bash
-/clawseatbelt-status
-/clawseatbelt-scan /path/to/skill
-/clawseatbelt-proofpack --target pr-comment --audience public
-/clawseatbelt-answer --target support --audience public
+/csb_status
+/csb_scan /path/to/skill
+/csb_proof --target pr-comment --audience public
+/csb_answer --target support --audience public
 ```
 
 For a clean-install proof check:
 
 ```bash
-/clawseatbelt-challenge --target markdown --audience public
+/csb_check --target markdown --audience public
 ```

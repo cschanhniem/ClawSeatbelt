@@ -1,9 +1,10 @@
+import { buildSlashCommand } from "../core/productMetadata.js";
 import type { RuntimeMode } from "../core/config.js";
 import type { PostureSummary } from "../types/domain.js";
 
-export const CLAWSEATBELT_STATUS_COMMAND = "/clawseatbelt-status";
-export const CLAWSEATBELT_CHALLENGE_COMMAND = "/clawseatbelt-challenge";
-export const CLAWSEATBELT_SHARE_CHAT_COMMAND = "/clawseatbelt-proofpack --target chat --audience public";
+export const CLAWSEATBELT_STATUS_COMMAND = buildSlashCommand("status");
+export const CLAWSEATBELT_CHALLENGE_COMMAND = buildSlashCommand("challenge");
+export const CLAWSEATBELT_SHARE_CHAT_COMMAND = `${buildSlashCommand("proofpack")} --target chat --audience public`;
 
 function resolveActivationCommand(summary: PostureSummary): string {
   return summary.findings.length > 0 ? CLAWSEATBELT_STATUS_COMMAND : CLAWSEATBELT_CHALLENGE_COMMAND;

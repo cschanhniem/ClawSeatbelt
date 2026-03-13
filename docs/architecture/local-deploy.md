@@ -62,7 +62,7 @@ sequenceDiagram
   OC->>Home: reload enabled plugins into the running gateway
   Dev->>OC: ask a normal question once
   OC-->>Dev: one-time activation brief in the next reply
-  Dev->>OC: /clawseatbelt-status
+  Dev->>OC: /csb_status
 ```
 
 ## Data Flow
@@ -85,6 +85,7 @@ flowchart LR
 
 - `link` mode is the fastest inner loop and points OpenClaw at the repository checkout.
 - `pack` mode is the safer release rehearsal because it exercises the tarball OpenClaw actually installs.
+- To refresh a linked local install, rerun `npm run deploy:local`. To refresh a packed local install, rerun `npm run deploy:local:pack`.
 - OpenClaw can warn that `plugins.allow` is empty during the initial install before the allowlist write runs. That warning is transient on a clean first install.
 - The deploy script confirms install metadata immediately, but a running gateway still needs a restart before the plugin becomes active in the live session.
 - After the restart, the next normal assistant reply should include a one-time activation brief unless the operator immediately uses a ClawSeatbelt command first.

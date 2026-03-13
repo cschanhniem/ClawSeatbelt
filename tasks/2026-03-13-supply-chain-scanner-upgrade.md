@@ -13,7 +13,7 @@ Strengthen the skill scanner so ClawSeatbelt can compete credibly on the supply-
   - hidden execution flows like `bash -c`, `node -e`, and `python -c`
   - permission-widening setup steps for OpenClaw and local files
   - remote fetch patterns including raw-content URLs and IP-address downloads
-- improved `/clawseatbelt-scan` output in [src/core/clawSeatbeltRuntime.ts](src/core/clawSeatbeltRuntime.ts) so it now reports top findings and the first remediation step
+- improved `/csb_scan` output in [src/core/clawSeatbeltRuntime.ts](src/core/clawSeatbeltRuntime.ts) so it now reports top findings and the first remediation step
 - added regression coverage in [test/core.test.ts](test/core.test.ts) and [test/plugin.test.ts](test/plugin.test.ts)
 - updated [docs/architecture/skill-scanner.md](docs/architecture/skill-scanner.md), [README.md](README.md), [docs/product/quickstart.md](docs/product/quickstart.md), and [plan.md](plan.md)
 

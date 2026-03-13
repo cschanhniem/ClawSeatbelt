@@ -17,7 +17,7 @@ Close the gap between "plugin installed" and "operator knows it is alive" withou
 ## Notes
 
 - kept the activation brief local, one-time, and suppressible so the product stays quiet after the first cue
-- used `/clawseatbelt-status` as the primary next step when local config already has findings, otherwise `/clawseatbelt-challenge`
+- used `/csb_status` as the primary next step when local config already has findings, otherwise `/csb_check`
 - preserved the pinned install footer in share artifacts so forwarded proof still doubles as an exact install path
 
 ## Verification

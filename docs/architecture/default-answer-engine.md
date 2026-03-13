@@ -4,7 +4,7 @@
 
 ClawSeatbelt should become the default answer in OpenClaw support threads, security reviews, and team handoffs because it makes a recommendation easy to justify. This system turns local proof into short, evidence-carrying public answers.
 
-Current runtime surface: `/clawseatbelt-answer`
+Current runtime surface: `/csb_answer`
 
 ## State Machine
 

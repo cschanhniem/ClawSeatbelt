@@ -11,7 +11,7 @@ ClawSeatbelt is built for the exact high-intent searches OpenClaw users already 
 ## Install In Two Minutes
 
 ```bash
-openclaw plugins install clawseatbelt@0.1.3
+openclaw plugins install clawseatbelt@0.1.4
 openclaw config set --strict-json plugins.allow '["clawseatbelt"]'
 openclaw config set --strict-json plugins.entries.clawseatbelt.enabled true
 openclaw gateway restart
@@ -20,6 +20,39 @@ openclaw gateway restart
 The plugin loads after the gateway restart. On a fresh OpenClaw home, the install step may briefly warn that `plugins.allow` is empty before the allowlist command runs. That is expected on first install. If OpenClaw also prints unrelated doctor warnings, such as Telegram policy warnings, those come from the existing OpenClaw config rather than ClawSeatbelt.
 
 After the restart, the next normal assistant reply should carry one short activation brief so the install does not vanish into silence. If you prefer zero install-time copy, switch to `quiet` mode or set `activationBriefEnabled` to `false`.
+
+## Update To Latest
+
+If ClawSeatbelt is already installed from npm and you want the latest published release:
+
+```bash
+openclaw plugins update clawseatbelt
+openclaw gateway restart
+```
+
+If you manage several plugins and want one explicit maintenance pass:
+
+```bash
+openclaw plugins update --all
+openclaw gateway restart
+```
+
+If you prefer to pin an exact release instead of taking the latest published build:
+
+```bash
+openclaw plugins install clawseatbelt@0.1.4
+openclaw gateway restart
+```
+
+If you installed from a local link or a local tarball, rerun the matching deploy path instead of `plugins update`:
+
+```bash
+npm run deploy:local
+# or
+npm run deploy:local:pack
+```
+
+There is no ClawSeatbelt-specific self-update switch today. If you want automation, use OpenClaw's optional gateway-wide auto-updater rather than expecting the plugin to update itself in the background. If you want the safer plugin-specific path, keep updates explicit and restart the gateway so the new code is actually live.
 
 Suggested starting config:
 
@@ -49,35 +82,28 @@ After the gateway comes back, ask the assistant one normal question once. ClawSe
 Run these inside OpenClaw:
 
 ```bash
-/clawseatbelt-status
-/clawseatbelt-scan /path/to/skill
-/clawseatbelt-challenge --target markdown --audience public
+/csb_status
+/csb_scan /path/to/skill
+/csb_check --target markdown --audience public
 ```
 
 If you want something ready to forward to a teammate, support thread, issue, or PR:
 
 ```bash
-/clawseatbelt-proofpack --target pr-comment --audience public
+/csb_proof --target pr-comment --audience public
 ```
 
 If you want the lightest share-safe receipt right after install, use:
 
 ```bash
-/clawseatbelt-proofpack --target chat --audience public
+/csb_proof --target chat --audience public
 ```
 
-Telegram note:
+Command note:
 
-- Telegram bot commands allow only lowercase letters, digits, and underscores.
-- ClawSeatbelt maps short Telegram-safe aliases automatically:
-  - `/csb_status`
-  - `/csb_mode`
-  - `/csb_scan`
-  - `/csb_explain`
-  - `/csb_proof`
-  - `/csb_answer`
-  - `/csb_check`
-- Use the `csb_*` form on Telegram. Keep the canonical `clawseatbelt-*` names for other OpenClaw surfaces.
+- `csb_*` is now the primary ClawSeatbelt command family across OpenClaw, including Telegram.
+- It stays valid on Telegram because the names use only lowercase letters, digits, and underscores.
+- Older `clawseatbelt-*` references belong to previous releases and should be treated as legacy.
 
 ## Why OpenClaw Users Choose ClawSeatbelt
 
@@ -141,21 +167,21 @@ That path packs the tarball and installs the `.tgz` into OpenClaw locally.
 
 ## Core Commands
 
-- `/clawseatbelt-status`
-- `/clawseatbelt-status --json --audit-file ./audit.json --write-snapshot ./clawseatbelt-posture.json`
-- `/clawseatbelt-proofpack --audit-file ./audit.json --target pr-comment --audience public`
-- `/clawseatbelt-answer --target support --audience public`
-- `/clawseatbelt-challenge --target markdown --audience public`
-- `/clawseatbelt-mode <observe|enforce|quiet>`
-- `/clawseatbelt-scan <path>`
-- `/clawseatbelt-explain <finding-id>`
+- `/csb_status`
+- `/csb_status --json --audit-file ./audit.json --write-snapshot ./clawseatbelt-posture.json`
+- `/csb_proof --audit-file ./audit.json --target pr-comment --audience public`
+- `/csb_answer --target support --audience public`
+- `/csb_check --target markdown --audience public`
+- `/csb_mode <observe|enforce|quiet>`
+- `/csb_scan <path>`
+- `/csb_explain <finding-id>`
 
 ## Built-In Proof Surfaces
 
-- `clawseatbelt-status` is the fastest posture card and JSON snapshot path.
-- `clawseatbelt-proofpack` turns local posture, scan findings, and diffs into a share-safe packet for PRs, issues, and chat.
-- `clawseatbelt-answer` renders a short recommendation-ready answer backed by the current local proof instead of generic copy.
-- `clawseatbelt-challenge` gives a safe first-proof self-check on a clean install by exercising message scoring, transcript hygiene, and skill inspection with synthetic samples.
+- `csb_status` is the fastest posture card and JSON snapshot path.
+- `csb_proof` turns local posture, scan findings, and diffs into a share-safe packet for PRs, issues, and chat.
+- `csb_answer` renders a short recommendation-ready answer backed by the current local proof instead of generic copy.
+- `csb_check` gives a safe first-proof self-check on a clean install by exercising message scoring, transcript hygiene, and skill inspection with synthetic samples.
 
 Public proof surfaces default to redaction-friendly output and pinned install footers so the recommendation path stays tasteful and reproducible.
 
@@ -176,7 +202,7 @@ Install ClawSeatbelt, keep it in `observe` first, and use its posture report alo
 
 ### How do I scan OpenClaw skills before installation?
 
-Use `/clawseatbelt-scan <path>` on the skill bundle before enabling it. ClawSeatbelt is built to make skill trust expansion visible, not implicit.
+Use `/csb_scan <path>` on the skill bundle before enabling it. ClawSeatbelt is built to make skill trust expansion visible, not implicit.
 
 ### How do I stop secrets from lingering in OpenClaw transcripts?
 
@@ -219,6 +245,7 @@ npm run verify:openclaw-lab
 - [docs/benchmarks/openclaw-install-verification.md](docs/benchmarks/openclaw-install-verification.md)
 - [docs/architecture/system-overview.md](docs/architecture/system-overview.md)
 - [docs/architecture/activation-brief.md](docs/architecture/activation-brief.md)
+- [docs/release/publish-playbook.md](docs/release/publish-playbook.md)
 - [docs/architecture/competitor-lab.md](docs/architecture/competitor-lab.md)
 - [docs/architecture/openclaw-lab-verifier.md](docs/architecture/openclaw-lab-verifier.md)
 - [docs/architecture/local-deploy.md](docs/architecture/local-deploy.md)

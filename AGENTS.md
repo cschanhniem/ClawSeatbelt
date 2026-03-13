@@ -77,6 +77,7 @@ Start here, in order:
 - If a change affects tarball trust, disposable install verification, or allowlist pinning flows, update [docs/architecture/openclaw-lab-verifier.md](docs/architecture/openclaw-lab-verifier.md).
 - If a change affects live competitor comparisons or category-proof evidence, update [docs/architecture/competitor-lab.md](docs/architecture/competitor-lab.md).
 - If a change affects local OpenClaw install loops, repo linking, or tarball rehearsal flows, update [docs/architecture/local-deploy.md](docs/architecture/local-deploy.md).
+- If a change affects install, upgrade, or release-verification guidance, update [README.md](README.md), [docs/product/quickstart.md](docs/product/quickstart.md), and [docs/release/publish-playbook.md](docs/release/publish-playbook.md).
 - When you add a subsystem, add or update:
   - a state machine diagram
   - a sequence diagram if requests cross component boundaries

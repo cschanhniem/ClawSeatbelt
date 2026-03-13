@@ -6,7 +6,7 @@ This component is the seam between ClawSeatbelt’s pure logic and OpenClaw’s 
 - `api.on(...)`
 - `api.registerCommand(...)`
 - `api.registerService(...)`
-- `nativeNames` for channel-native command aliases such as Telegram-safe slash commands
+- `nativeNames` for legacy or transport-specific command compatibility when needed
 
 ## State Machine
 
@@ -33,7 +33,7 @@ sequenceDiagram
 
   OpenClaw->>Plugin: load extension
   Plugin->>Core: validate config
-  Plugin->>OpenClaw: register commands with channel-native aliases
+  Plugin->>OpenClaw: register commands with compatibility aliases
   Plugin->>OpenClaw: register service
   Plugin->>OpenClaw: register hooks
   OpenClaw->>Plugin: first eligible before_prompt_build

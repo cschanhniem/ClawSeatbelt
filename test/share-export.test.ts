@@ -113,7 +113,7 @@ test("trust challenge produces a concise first-proof artifact", () => {
   assert.match(artifact, /ClawSeatbelt Trust Challenge/);
   assert.match(artifact, /first proof/i);
   assert.match(artifact, /Inbound Risk Scoring/);
-  assert.match(artifact, /\/clawseatbelt-status/);
-  assert.match(artifact, /\/clawseatbelt-proofpack --target chat --audience public/);
+  assert.match(artifact, /\/csb_status/);
+  assert.match(artifact, /\/csb_proof --target chat --audience public/);
   assert.match(artifact, new RegExp(escapeRegex(buildPinnedInstallCommand())));
 });

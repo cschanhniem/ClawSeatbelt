@@ -24,7 +24,12 @@ import type { ClawSeatbeltConfig, RuntimeMode } from "./config.js";
 import { evaluateInboundMessage } from "./riskEngine.js";
 import { redactToolResult, redactUnknownValue } from "./redactionEngine.js";
 import { ClawSeatbeltRuntimeState } from "./runtimeState.js";
-import { buildSlashCommand, CLAWSEATBELT_COMMANDS, resolveCommandName } from "./productMetadata.js";
+import {
+  buildLegacySlashCommand,
+  buildSlashCommand,
+  CLAWSEATBELT_COMMANDS,
+  resolveCommandName
+} from "./productMetadata.js";
 
 function resolveSessionKey(parts: Array<string | undefined>): string | undefined {
   const filtered = parts.filter((part): part is string => Boolean(part));
@@ -79,13 +84,9 @@ function buildReply(text: string, isError = false): ReplyPayload {
 }
 
 function rewriteSlashCommandReferences(text: string, channel?: string): string {
-  if (channel?.toLowerCase() !== "telegram") {
-    return text;
-  }
-
   let rewritten = text;
   for (const key of Object.keys(CLAWSEATBELT_COMMANDS) as Array<keyof typeof CLAWSEATBELT_COMMANDS>) {
-    rewritten = rewritten.replaceAll(buildSlashCommand(key), buildSlashCommand(key, channel));
+    rewritten = rewritten.replaceAll(buildLegacySlashCommand(key), buildSlashCommand(key));
   }
   return rewritten;
 }
@@ -434,7 +435,8 @@ export class ClawSeatbeltRuntime {
     this.api.registerCommand({
       name: CLAWSEATBELT_COMMANDS[key].canonical,
       nativeNames: {
-        telegram: CLAWSEATBELT_COMMANDS[key].telegram
+        default: CLAWSEATBELT_COMMANDS[key].legacy,
+        telegram: CLAWSEATBELT_COMMANDS[key].canonical
       },
       ...definition
     });
@@ -535,7 +537,7 @@ export class ClawSeatbeltRuntime {
     const findingId = ctx.args?.trim();
     if (!findingId) {
       return buildReply(
-        `Provide a finding ID, for example ${resolveCommandName("explain", ctx.channel)} cfg-exec-full.`,
+        `Provide a finding ID, for example ${resolveCommandName("explain")} cfg-exec-full.`,
         true
       );
     }

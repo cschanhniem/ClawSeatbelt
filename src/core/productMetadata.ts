@@ -1,49 +1,62 @@
 export const CLAWSEATBELT_PLUGIN_ID = "clawseatbelt";
 export const CLAWSEATBELT_PLUGIN_NAME = "ClawSeatbelt";
-export const CLAWSEATBELT_PLUGIN_VERSION = "0.1.3";
+export const CLAWSEATBELT_PLUGIN_VERSION = "0.1.4";
 export const CLAWSEATBELT_REPOSITORY_URL = "https://github.com/cschanhniem/ClawSeatbelt";
 
 export const CLAWSEATBELT_COMMANDS = {
   status: {
-    canonical: "clawseatbelt-status",
-    telegram: "csb_status"
+    canonical: "csb_status",
+    telegram: "csb_status",
+    legacy: "clawseatbelt-status"
   },
   mode: {
-    canonical: "clawseatbelt-mode",
-    telegram: "csb_mode"
+    canonical: "csb_mode",
+    telegram: "csb_mode",
+    legacy: "clawseatbelt-mode"
   },
   scan: {
-    canonical: "clawseatbelt-scan",
-    telegram: "csb_scan"
+    canonical: "csb_scan",
+    telegram: "csb_scan",
+    legacy: "clawseatbelt-scan"
   },
   explain: {
-    canonical: "clawseatbelt-explain",
-    telegram: "csb_explain"
+    canonical: "csb_explain",
+    telegram: "csb_explain",
+    legacy: "clawseatbelt-explain"
   },
   proofpack: {
-    canonical: "clawseatbelt-proofpack",
-    telegram: "csb_proof"
+    canonical: "csb_proof",
+    telegram: "csb_proof",
+    legacy: "clawseatbelt-proofpack"
   },
   answer: {
-    canonical: "clawseatbelt-answer",
-    telegram: "csb_answer"
+    canonical: "csb_answer",
+    telegram: "csb_answer",
+    legacy: "clawseatbelt-answer"
   },
   challenge: {
-    canonical: "clawseatbelt-challenge",
-    telegram: "csb_check"
+    canonical: "csb_check",
+    telegram: "csb_check",
+    legacy: "clawseatbelt-challenge"
   }
 } as const;
 
 export type ClawSeatbeltCommandKey = keyof typeof CLAWSEATBELT_COMMANDS;
 
-export function resolveCommandName(key: ClawSeatbeltCommandKey, channel?: string): string {
-  return channel?.toLowerCase() === "telegram"
-    ? CLAWSEATBELT_COMMANDS[key].telegram
-    : CLAWSEATBELT_COMMANDS[key].canonical;
+export function resolveCommandName(key: ClawSeatbeltCommandKey): string {
+  return CLAWSEATBELT_COMMANDS[key].canonical;
 }
 
-export function buildSlashCommand(key: ClawSeatbeltCommandKey, channel?: string): string {
-  return `/${resolveCommandName(key, channel)}`;
+export function resolveLegacyCommandName(key: ClawSeatbeltCommandKey): string {
+  return CLAWSEATBELT_COMMANDS[key].legacy;
+}
+
+export function buildSlashCommand(key: ClawSeatbeltCommandKey): string {
+  return `/${resolveCommandName(key)}`;
+}
+
+export function buildLegacySlashCommand(key: ClawSeatbeltCommandKey): string {
+  return `/${resolveLegacyCommandName(key)}`;
 }
 
 export function buildPinnedInstallCommand(version = CLAWSEATBELT_PLUGIN_VERSION): string {

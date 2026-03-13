@@ -28,6 +28,22 @@ Use one tight paragraph that answers a user’s real question:
 openclaw plugins install clawseatbelt@<version>
 ```
 
+## Upgrade
+
+For operators who already have ClawSeatbelt installed:
+
+```bash
+openclaw plugins update clawseatbelt
+openclaw gateway restart
+```
+
+If they want a fully pinned rollout instead of the latest published build:
+
+```bash
+openclaw plugins install clawseatbelt@<version>
+openclaw gateway restart
+```
+
 ## Recommended Setup
 
 - Start in `observe` mode, then move to `enforce` after a low-noise soak.
@@ -39,10 +55,10 @@ openclaw plugins install clawseatbelt@<version>
 Point people to one fast check:
 
 ```bash
-/clawseatbelt-status
+/csb_status
 ```
 
-If the release matters to Telegram users, call out the Telegram-safe alias too:
+If the release changes command surface or first-proof guidance, keep the primary command example explicit:
 
 ```bash
 /csb_status
@@ -51,11 +67,12 @@ If the release matters to Telegram users, call out the Telegram-safe alias too:
 If the release improved proof or recommendation surfaces, also call out:
 
 ```bash
-/clawseatbelt-challenge --target markdown --audience public
+/csb_check --target markdown --audience public
 ```
 
 ## Notes
 
 - ClawSeatbelt reduces risk. It does not solve prompt injection.
 - ClawSeatbelt is not a sandbox or kernel boundary.
+- ClawSeatbelt does not ship a plugin-specific auto-update switch. If you mention automation, make it clear that OpenClaw's auto-updater is gateway-wide rather than a per-plugin toggle.
 - Call out any new hook usage, blocking behavior, or config changes explicitly.

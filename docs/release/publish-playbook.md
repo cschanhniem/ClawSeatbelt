@@ -50,13 +50,29 @@ npm view clawseatbelt dist-tags --json
 Then verify install in a disposable OpenClaw instance:
 
 ```bash
-openclaw plugins install clawseatbelt@0.1.3
+openclaw plugins install clawseatbelt@0.1.4
 openclaw config set --strict-json plugins.allow '["clawseatbelt"]'
 openclaw config set --strict-json plugins.entries.clawseatbelt.enabled true
 openclaw gateway restart
 ```
 
 On a blank OpenClaw home, the install step may briefly warn that `plugins.allow` is empty before the allowlist command runs. Keep going. The plugin becomes live after the gateway restart.
+
+Then verify the upgrade path too:
+
+```bash
+openclaw plugins update clawseatbelt
+openclaw gateway restart
+```
+
+If you want to verify the bulk maintenance path, you can also run:
+
+```bash
+openclaw plugins update --all
+openclaw gateway restart
+```
+
+Current operator guidance: ClawSeatbelt does not expose a plugin-specific auto-update switch. OpenClaw's documented auto-updater is a gateway-wide feature, so if you enable it, treat that as platform-level automation rather than per-plugin background updating.
 
 ## Automated Publish
 
@@ -77,9 +93,14 @@ Required GitHub configuration:
 Recommended flow:
 
 1. Merge the release commit to `main`.
-2. Create and push a tag like `v0.1.3`.
+2. Create and push a tag like `v0.1.4`.
 3. Let GitHub Actions run CI, then publish to npm.
 4. If the publish run fails with `Unable to authenticate`, re-check the npm trusted publisher fields exactly. npm matches repository and workflow filename case-sensitively.
+
+Post-publish command-surface check:
+
+- confirm the activation brief and operator guidance point to `/csb_status`, `/csb_proof`, and `/csb_check`
+- confirm any `clawseatbelt-*` mentions are framed as legacy compatibility aliases, not primary commands
 
 Manual fallback:
 

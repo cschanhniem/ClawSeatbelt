@@ -21,8 +21,8 @@ Without those, the product had a good engine but a weaker selection path than th
 - added a default answer renderer in [src/reporting/defaultAnswer.ts](src/reporting/defaultAnswer.ts)
 - added product metadata constants in [src/core/productMetadata.ts](src/core/productMetadata.ts)
 - wired new runtime commands into [src/core/clawSeatbeltRuntime.ts](src/core/clawSeatbeltRuntime.ts):
-  - `/clawseatbelt-proofpack`
-  - `/clawseatbelt-answer`
+  - `/csb_proof`
+  - `/csb_answer`
 - updated [README.md](README.md), [docs/product/quickstart.md](docs/product/quickstart.md), [plan.md](plan.md), and the architecture docs so shipped capability now matches the roadmap
 - fixed package metadata URLs in [package.json](package.json) to the canonical repository
 

@@ -29,7 +29,7 @@
 
 - Tightened `assessOpenClawConfiguration` to reduce false positives and catch omitted allowlist entries.
 - Hardened `scanSkillDirectory` against symlinks, oversized files, and dependency-tree noise.
-- Made `clawseatbelt-scan` fail cleanly with an operator-readable error.
+- Made `csb_scan` fail cleanly with an operator-readable error.
 - Reworked recursive redaction to preserve sanitized clones across circular references.
 - Expanded `openclaw.plugin.json` to match the runtime config schema.
 - Switched the build clean step to a Node-based command for cross-platform behavior.

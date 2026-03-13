@@ -41,7 +41,7 @@ sequenceDiagram
     Brief-->>OpenClaw: mode, posture summary, proof path, share path
     OpenClaw-->>Operator: first reply includes activation brief
   else operator runs a ClawSeatbelt command first
-    Operator->>Runtime: /clawseatbelt-status or /clawseatbelt-challenge
+    Operator->>Runtime: /csb_status or /csb_check
     Runtime->>Runtime: suppress auto brief for this gateway run
     Runtime-->>Operator: explicit command output only
   end

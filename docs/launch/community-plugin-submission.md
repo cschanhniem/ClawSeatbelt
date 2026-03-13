@@ -39,7 +39,7 @@ ClawSeatbelt is the trust plugin OpenClaw users can install first without adding
 ## Install
 
 ```bash
-openclaw plugins install clawseatbelt@0.1.3
+openclaw plugins install clawseatbelt@0.1.4
 ```
 
 After install, pin `plugins.allow`, enable the plugin entry, and restart the OpenClaw gateway before first use.
@@ -55,7 +55,7 @@ After install, pin `plugins.allow`, enable the plugin entry, and restart the Ope
 
 Before sending the PR:
 
-1. Add screenshots or a short terminal capture of `clawseatbelt-status` and `clawseatbelt-scan`.
+1. Add screenshots or a short terminal capture of `csb_status` and `csb_scan`.
 2. Include the exact OpenClaw version tested against.
 3. Keep the listing language calm and precise. Promise local-first trust, not impossible safety.
 4. Lead the listing with first-install clarity and first-proof speed, not architectural detail.

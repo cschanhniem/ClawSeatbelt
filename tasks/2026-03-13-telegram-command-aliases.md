@@ -18,4 +18,4 @@ Telegram bot commands accept only lowercase letters, digits, and underscores, so
 
 ## Result
 
-ClawSeatbelt keeps the canonical `clawseatbelt-*` command family for OpenClaw generally, while Telegram users can invoke the same capabilities with short valid aliases such as `/csb_status` and `/csb_scan`.
+This task introduced the `csb_*` family because Telegram required underscore-safe names. The command family was later promoted to the primary ClawSeatbelt surface across OpenClaw more broadly.

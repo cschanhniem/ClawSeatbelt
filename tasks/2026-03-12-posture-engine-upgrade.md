@@ -24,7 +24,7 @@
   - open DM policy
   - open group policy
   - insecure DM session scope for shared ingress
-- Upgraded `clawseatbelt-status` so it now supports:
+- Upgraded `csb_status` so it now supports:
   - `--audit-file`
   - `--json`
   - `--write-snapshot`

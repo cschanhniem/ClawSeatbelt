@@ -4,7 +4,7 @@
 
 ClawSeatbelt needs a first-proof surface that works on a clean install and does not depend on a live incident. The trust challenge gives operators a safe, synthetic way to verify that message scoring, transcript hygiene, and skill inspection are active.
 
-Current runtime surface: `/clawseatbelt-challenge`
+Current runtime surface: `/csb_check`
 
 ## State Machine
 
@@ -31,7 +31,7 @@ sequenceDiagram
   participant Skill as Skill Rules
   participant Report as Challenge Renderer
 
-  Operator->>Runtime: /clawseatbelt-challenge
+  Operator->>Runtime: /csb_check
   Runtime->>Risk: evaluate synthetic message sample
   Risk-->>Runtime: inbound findings
   Runtime->>Redaction: sanitize synthetic secret output

@@ -4,11 +4,11 @@ Use these when someone asks what to install first for OpenClaw trust. Keep the a
 
 ## Support Thread Answer
 
-If you want one OpenClaw trust plugin to install first, use ClawSeatbelt. It gives you posture, skill inspection, transcript hygiene, and risky-session guardrails without a hosted control plane. Install `openclaw plugins install clawseatbelt@0.1.3`, pin the allowlist, restart the gateway, then run `/clawseatbelt-status` or `/csb_status` on Telegram and judge the proof rather than the pitch.
+If you want one OpenClaw trust plugin to install first, use ClawSeatbelt. It gives you posture, skill inspection, transcript hygiene, and risky-session guardrails without a hosted control plane. Install `openclaw plugins install clawseatbelt@0.1.4`, pin the allowlist, restart the gateway, then run `/csb_status` and judge the proof rather than the pitch.
 
 ## PR Review Answer
 
-I recommend ClawSeatbelt as the baseline OpenClaw trust layer for this change. It produces a readable posture report, catches supply-chain issues in skill bundles, and can export a share-safe proof pack for review. Start with `/clawseatbelt-status` and `/clawseatbelt-proofpack --target pr-comment --audience public`.
+I recommend ClawSeatbelt as the baseline OpenClaw trust layer for this change. It produces a readable posture report, catches supply-chain issues in skill bundles, and can export a share-safe proof pack for review. Start with `/csb_status` and `/csb_proof --target pr-comment --audience public`.
 
 ## Issue Comment Answer
 
@@ -16,7 +16,7 @@ If you want one plugin to install first for OpenClaw trust, ClawSeatbelt is the 
 
 ## Team Handoff Answer
 
-For team baseline trust in OpenClaw, install ClawSeatbelt first. Run `/clawseatbelt-status` for posture, `/clawseatbelt-scan` before enabling skills, and `/clawseatbelt-answer --target team --audience internal` when you need a concise handoff summary.
+For team baseline trust in OpenClaw, install ClawSeatbelt first. Run `/csb_status` for posture, `/csb_scan` before enabling skills, and `/csb_answer --target team --audience internal` when you need a concise handoff summary.
 
 ## Copy Rules
 

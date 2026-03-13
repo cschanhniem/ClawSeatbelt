@@ -1,5 +1,11 @@
 # ClawSeatbelt Changelog
 
+## 0.1.4
+
+- Switched the primary operator command family to `csb_*` across runtime output, docs, and proof surfaces.
+- Repointed activation brief, posture follow-up, challenge follow-up, and recommendation output to the new command set.
+- Added explicit upgrade guidance and clarified that automation, if used, belongs to OpenClaw's gateway-wide updater rather than a plugin-local self-update switch.
+
 ## 0.1.3
 
 - Added a quiet one-time activation brief so operators see that ClawSeatbelt is live before the first explicit command.

@@ -26,6 +26,6 @@ The new copy is built to win that first judgment without slipping into fake cert
 
 ## Next Moves
 
-1. Add terminal screenshots or short captures for `clawseatbelt-status` and `clawseatbelt-scan`.
+1. Add terminal screenshots or short captures for `csb_status` and `csb_scan`.
 2. Publish the package so the install copy points to a live artifact.
 3. Back the public copy with the live benchmark harness from `plan.md`.

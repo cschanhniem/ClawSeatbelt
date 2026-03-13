@@ -32,11 +32,12 @@ ClawSeatbelt is a local-first trust layer for OpenClaw. The core shape is:
 11. If the work affects package trust, disposable install checks, or allowlist pinning, read [docs/architecture/openclaw-lab-verifier.md](docs/architecture/openclaw-lab-verifier.md).
 12. If the work affects live competitor installs or category-proof claims, read [docs/architecture/competitor-lab.md](docs/architecture/competitor-lab.md).
 13. If the work affects local OpenClaw install loops or tarball rehearsal, read [docs/architecture/local-deploy.md](docs/architecture/local-deploy.md).
-14. If the work affects messaging, launch sequencing, or recommendation surfaces, read [marketing/no1-choice-plan.md](marketing/no1-choice-plan.md) and [marketing/message-map.md](marketing/message-map.md).
-15. Check which rubric in `plan.md` the work is meant to improve and which competitor it is meant to beat.
-16. Make the smallest coherent set of changes that improves the product materially.
-17. Update docs, diagrams, and task log in the same turn.
-18. Run verification for the surfaces you touched.
+14. If the work affects install, upgrade, or release-verification guidance, read [README.md](README.md), [docs/product/quickstart.md](docs/product/quickstart.md), and [docs/release/publish-playbook.md](docs/release/publish-playbook.md).
+15. If the work affects messaging, launch sequencing, or recommendation surfaces, read [marketing/no1-choice-plan.md](marketing/no1-choice-plan.md) and [marketing/message-map.md](marketing/message-map.md).
+16. Check which rubric in `plan.md` the work is meant to improve and which competitor it is meant to beat.
+17. Make the smallest coherent set of changes that improves the product materially.
+18. Update docs, diagrams, and task log in the same turn.
+19. Run verification for the surfaces you touched.
 
 ## Decision Filter
 

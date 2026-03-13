@@ -27,7 +27,7 @@ function openingFor(target: DefaultAnswerTarget): string {
 }
 
 export function renderDefaultAnswer(summary: PostureSummary, options: DefaultAnswerOptions): string {
-  const statusCommand = buildSlashCommand("status", options.channel);
+  const statusCommand = buildSlashCommand("status");
   const firstStep = sanitizeShareText(
     summary.remediationSteps[0] ?? `Run ${statusCommand} and review the first proof.`,
     options.audience
